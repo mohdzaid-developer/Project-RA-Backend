@@ -1,0 +1,30 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 15
+    },
+    "auditLog": "D:\\pp\\printx\\backend\\printx\\.4488e475581802b5c59a2adaf25052ee30ff4b7f-audit.json",
+    "files": [
+        {
+            "date": 1717955381171,
+            "name": "D:\\pp\\printx\\backend\\printx\\printx-2024-06-09.log",
+            "hash": "a012040cab64374a7785d0c58da24666800af838c246dff01636086b0193cc27"
+        },
+        {
+            "date": 1718095714487,
+            "name": "D:\\pp\\printx\\backend\\printx\\printx-2024-06-11.log",
+            "hash": "ffc10e0097503935ed9c3e5073aedefa651cc1c740e6813634535d11c7d932dd"
+        },
+        {
+            "date": 1718688682186,
+            "name": "D:\\pp\\printx\\backend\\printx\\printx-2024-06-17.log",
+            "hash": "871cd5325f6a74cbcf2cfb2b3f1af57f16bd0a95e3d276e9d589510deb8d4332"
+        },
+        {
+            "date": 1718730662158,
+            "name": "D:\\pp\\printx\\backend\\printx\\printx-2024-06-18.log",
+            "hash": "76e61276191c0107bf8797cd6fa008ddfe47c1ff888b282eaa9870bf00c081e6"
+        }
+    ],
+    "hashType": "sha256"
+}

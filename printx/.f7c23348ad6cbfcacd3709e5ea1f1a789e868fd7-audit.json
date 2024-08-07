@@ -1,0 +1,35 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 15
+    },
+    "auditLog": "D:\\New folder\\privateProject\\backend\\printx\\.f7c23348ad6cbfcacd3709e5ea1f1a789e868fd7-audit.json",
+    "files": [
+        {
+            "date": 1722707273190,
+            "name": "D:\\New folder\\privateProject\\backend\\printx\\printx-2024-08-03.log",
+            "hash": "0e0faa64d673286ba0319f89b2c4da1e5db2e097f19f67743b004a92dbd343da"
+        },
+        {
+            "date": 1722781387992,
+            "name": "D:\\New folder\\privateProject\\backend\\printx\\printx-2024-08-04.log",
+            "hash": "b50237043ee2b1898acee6ea5ab915dda24162aadfacf1f75f3c3efcbc830877"
+        },
+        {
+            "date": 1722841786026,
+            "name": "D:\\New folder\\privateProject\\backend\\printx\\printx-2024-08-05.log",
+            "hash": "66a51b96c028b9be6887db31df98013eb99fff1fc40931b5e7d662d3974f28c1"
+        },
+        {
+            "date": 1722964071766,
+            "name": "D:\\New folder\\privateProject\\backend\\printx\\printx-2024-08-06.log",
+            "hash": "65742f9a2b2100bad0fbee418567741a1debd85caffc8f55cd26d46754537759"
+        },
+        {
+            "date": 1723014578438,
+            "name": "D:\\New folder\\privateProject\\backend\\printx\\printx-2024-08-07.log",
+            "hash": "d7e99fb597eb6b57ea9e1150f049190ad5d9cba0531cead23e51a76543028e80"
+        }
+    ],
+    "hashType": "sha256"
+}
