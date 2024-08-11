@@ -26,12 +26,12 @@ export async function createAdmin(user) {
         specialChars: false,
       });
       user.generatedPassword = await hashPassword(otp);
-      const token = await generateJWT(
+      const accessToken = await generateJWT(
         { ...user, otp, otpType: "register", role: "admin" },
         200,
         process.env.JWT_ACCESS_TOKEN_SECRET
       );
-      const RefreshToken = await generateJWT(
+      const refreshToken = await generateJWT(
         { ...user, otpType: "register", role: "admin" },
         3600,
         process.env.JWT_ACCESS_TOKEN_SECRET
@@ -40,8 +40,8 @@ export async function createAdmin(user) {
       logger.debug("saved user::" + user);
       serviceResponse.data = {
         message: "please check your email for verification code.",
-        token,
-        RefreshToken,
+        accessToken,
+        refreshToken,
       };
     }
   } catch (error) {
@@ -55,7 +55,7 @@ export async function createAdmin(user) {
 export async function otpResend(user) {
   logger.info(`${TAG}.otpResend() ==> `, user);
 
-  const serviceResponse = { statusCode: HttpStatusCodes.BAD_REQUEST };
+  const serviceResponse = { statusCode: HttpStatusCodes.OK };
   try {
     if (!user) {
       serviceResponse.message = "token expired";
@@ -68,7 +68,7 @@ export async function otpResend(user) {
             upperCaseAlphabets: false,
             specialChars: false,
           });
-          const token = await generateJWT(
+          const accessToken = await generateJWT(
             {
               ...user,
               otp,
@@ -76,7 +76,7 @@ export async function otpResend(user) {
             200,
             process.env.JWT_ACCESS_TOKEN_SECRET
           );
-          const RefreshToken = await generateJWT(
+          const refreshToken = await generateJWT(
             {
               ...user,
             },
@@ -86,9 +86,10 @@ export async function otpResend(user) {
           await sendSMS({ otp, email: user.email });
           serviceResponse.message = "resend successfully !";
           serviceResponse.data = {
-            token,
-            RefreshToken,
+            accessToken,
+            refreshToken,
             email: user.email,
+            otp:otp
           };
         }else{
           const existedUser = await adminAuth.checkEmailOrPhoneExist(user.email);
@@ -98,12 +99,12 @@ export async function otpResend(user) {
               specialChars: false,
             });
             user.generatedPassword = await hashPassword(otp);
-            const token = await generateJWT(
+            const accessToken = await generateJWT(
               { ...user, otp, otpType: false, role: "admin" },
               200,
               process.env.JWT_ACCESS_TOKEN_SECRET
             );
-            const RefreshToken = await generateJWT(
+            const refreshToken = await generateJWT(
               { ...user, otpType: false, role: "admin" },
               3600,
               process.env.JWT_ACCESS_TOKEN_SECRET
@@ -113,8 +114,8 @@ export async function otpResend(user) {
             logger.debug("saved user::" + user);
             serviceResponse.data = {
               message: "please check your email for verification code.",
-              token,
-              RefreshToken,
+              accessToken,
+              refreshToken,
             };
           }
         }
@@ -123,6 +124,7 @@ export async function otpResend(user) {
     }
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.otpResend`, error);
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     serviceResponse.error =
       "Failed to create admin due to technical difficulties";
   }
@@ -159,14 +161,14 @@ export async function otpVerify(user) {
               user.otp
             );
             if (isGeneratedPasswordCorrect) {
-              const token = await generateAccessToken({
+              const accessToken = await generateAccessToken({
                 id: existedUser._id,
                 email: existedUser.email,
               });
               serviceResponse.statusCode = HttpStatusCodes.OK;
               serviceResponse.data = {
-                token,
-                login:true
+                accessToken,
+                isLogin:true
               };
             } else {
               serviceResponse.message = "invalid otp 1!";
@@ -215,14 +217,14 @@ export async function loginUser(user) {
       const updatePromise = adminAuth.findAndUpdate({ ...user, isValid: true });
       const smsPromise = sendSMS({ otp, email: user.email });
 
-      const [token, RefreshToken] = await Promise.all([tokenPromise, refreshTokenPromise]);
+      const [token, refreshToken] = await Promise.all([tokenPromise, refreshTokenPromise]);
       await Promise.all([updatePromise, smsPromise]);
 
       logger.debug("saved user::" + user);
       serviceResponse.data = {
         message: "please check your email for verification code.",
-        token,
-        RefreshToken,
+        accessToken:token,
+        refreshToken,
       };
     } else {
       serviceResponse.message = "invalid email !";

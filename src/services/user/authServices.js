@@ -108,7 +108,6 @@ export async function otpResend(user) {
 
   const serviceResponse = { statusCode: HttpStatusCodes.BAD_REQUEST };
   try {
-    console.log(user)
     if (!user) {
       serviceResponse.message = "token expired";
       serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
@@ -193,8 +192,6 @@ export async function changePassword(user) {
   logger.info(`${TAG}.changePassword() ==> `, user);
   const serviceResponse = { statusCode: HttpStatusCodes.CREATED };
   try {
-    console.log(".............................")
-    console.log(user)
     if(user?.forget){
       serviceResponse.message = "invalid request with unauthorized token";
       serviceResponse.statusCode = HttpStatusCodes.UNAUTHORIZED;

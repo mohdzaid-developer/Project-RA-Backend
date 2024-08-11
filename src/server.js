@@ -9,6 +9,8 @@ import express from "express";
 import { initializeApp } from "./loader/intilizer.js";
 // import { PORT } from '@config';
 import logger from "./logger/index.js";
+import 'dotenv/config';
+
 // import { swaggerServe, swaggerSetup } from  './config.js'
 
 async function startApplication() {

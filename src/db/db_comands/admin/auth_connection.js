@@ -4,10 +4,6 @@ import Admin from '../../../models/Admin/Authentication.js';
 export const createAdmin = async (data) => {
   try {
       let admin = await Admin.create({...data})
-      if(admin){
-        console.log("llllllllllllllllllllllllllllllllllkkkkkkkkkkkkkkkkkkkkkkkkppppppppppppp")
-        console.log(admin)
-      }
       return data;
   } catch (error) {
     return error
