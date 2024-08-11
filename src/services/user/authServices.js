@@ -163,13 +163,13 @@ export async function loginUser(user) {
         user.password
       );
       if (isPasswordCorrect) {
-        const token = await generateAccessToken({
+        const accessToken = await generateAccessToken({
           id: existedUser[0]._id,
           email: existedUser[0].email,
         });
         serviceResponse.statusCode = HttpStatusCodes.OK;
         serviceResponse.data = {
-          token,
+          accessToken,
         };
       } else {
         serviceResponse.message = "wrong password !";

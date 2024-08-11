@@ -31,7 +31,7 @@ export const saveBookingDetails = async (data) => {
 export const findAndUpdateBookingStatus = async (data) => {
   try {
     let res = await Booking.updateOne(
-      { order_id: data.orderId },
+      { order_id: data.order_id },
       { $set: { ...data } }
     );
     return res;
