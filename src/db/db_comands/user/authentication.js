@@ -36,7 +36,7 @@ export const findAndUpdateImage = async (data) => {
   try {
     let res = await UserAuthModule.updateOne(
       { _id: data.id },
-      { $set: { ...data } }
+      { $set: { profilePic: data?.profilePic } }
     );
     return res;
   } catch (error) {

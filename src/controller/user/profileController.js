@@ -8,17 +8,12 @@ export async function addNewImage(req, res, next) {
   try {
     log.info(TAG + `.addNewImage()`);
     log.debug(`signup object = ${JSON.stringify(req.body)}`);
-    const imageBuffer = { file: { buffer: "" }, ...req };
     const oldData = req.userSession;
-    if (imageBuffer) {
-      if (imageBuffer.file) {
-        const authResponse = await profileService.addNewImage({
-          profilePic: imageBuffer.file.buffer,
-          ...oldData,
-        });
-        responseBuilder(authResponse, res, next, req);
-      }
-    }
+    const authResponse = await profileService.addNewImage({
+      profilePic:req?.body?.profileDetails,
+      ...oldData,
+    });
+    responseBuilder(authResponse, res, next, req);
   } catch (error) {
     log.error(`ERROR occurred in ${TAG}.addNewImage()`, error);
     next(error);
