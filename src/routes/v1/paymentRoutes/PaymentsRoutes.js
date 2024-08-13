@@ -11,7 +11,6 @@ router.post(
 );
 router.get(
   "/booking",
-  isAuthenticated,
   paymentController.getAllBooking
 );
 router.get(
