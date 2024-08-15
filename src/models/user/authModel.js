@@ -20,6 +20,10 @@ const userAuth = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isBooked: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 const userAuthModule = new mongoose.model("Authentication", userAuth);

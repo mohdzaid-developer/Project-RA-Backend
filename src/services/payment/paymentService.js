@@ -3,6 +3,7 @@ import { HttpStatusCodes } from "../../constants/statusCode.js";
 import Razorpay from "razorpay";
 import crypto from "crypto";
 import * as paymentAndBookingDb from "../../db/db_comands/payment/payment.js";
+import { checkEmailOrPhoneExist } from "../../db/db_comands/user/authentication.js";
 
 const TAG = "payment.service";
 
@@ -21,6 +22,12 @@ export async function createOrder(user) {
     return serviceResponse;
   }
 
+  const existedUser = await checkEmailOrPhoneExist(user?.email);
+  if (existedUser?.length == 0) {
+    serviceResponse.message = "Invalid User";
+    serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+    return serviceResponse;
+  }
   function isAtLeastOneMonthAfter(selectedDateStr) {
     const currentDate = new Date();
     const selectedDate = new Date(selectedDateStr);
@@ -33,10 +40,11 @@ export async function createOrder(user) {
       currentDate.getSeconds(),
       currentDate.getMilliseconds()
     );
-    // Check if the selected date is on or after one month after the current date
     return selectedDate >= oneMonthAfter;
   }
-  let correctDateOrNot = await isAtLeastOneMonthAfter(user?.bookingDetails?.start_date);
+  let correctDateOrNot = await isAtLeastOneMonthAfter(
+    user?.bookingDetails?.start_date
+  );
   if (correctDateOrNot == false) {
     serviceResponse.message =
       "the one month of time required plz select date one month after.";
@@ -59,6 +67,9 @@ export async function createOrder(user) {
         order_id: order?.id,
         status: "pending",
         user_id: user?.id,
+        phone: existedUser[0]?.phone,
+        client_name: existedUser[0]?.fullName,
+        email:existedUser[0]?.email
       });
       serviceResponse.message = "order Created Success Fully !";
       serviceResponse.statusCode = HttpStatusCodes.CREATED;
@@ -90,17 +101,28 @@ export async function verifyPaymentAndSave(user) {
     serviceResponse.data = null;
     return serviceResponse;
   }
-
+  const existedUser = await checkEmailOrPhoneExist(user?.email);
+  if (existedUser?.length == 0) {
+    serviceResponse.message = "Invalid User";
+    serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+    return serviceResponse;
+  }
   try {
     const expectedSignature = crypto
       .createHmac("sha256", "WeRnyn9uXXOidBHRsvgLRb97")
       .update(user?.orderId + "|" + user?.paymentId)
       .digest("hex");
+    const payment = await razorpayInstance.payments.fetch(user?.paymentId);
     if (expectedSignature === user?.signature) {
-      await paymentAndBookingDb?.savePaymentDetails({ ...user });
+      await paymentAndBookingDb?.savePaymentDetails({
+        ...user,
+        phone: existedUser[0]?.phone,
+        client_name: existedUser[0]?.fullName,
+        email:existedUser[0]?.email
+      });
       await paymentAndBookingDb?.findAndUpdateBookingStatus({
-        status: "confirmed",
-        order_id:user.orderId
+        status: "booked",
+        order_id: user.orderId,
       });
       serviceResponse.message = "Payment verified and saved.";
       serviceResponse.data = {
@@ -114,6 +136,22 @@ export async function verifyPaymentAndSave(user) {
   } catch (error) {
     serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     logger.error(`ERROR occurred in ${TAG}.verifyPaymentAndSave`, error);
+    serviceResponse.error =
+      "Failed to create admin due to technical difficulties";
+  }
+  return serviceResponse;
+}
+
+export async function updateBookingStatus(data) {
+  logger.info(`${TAG}.updateBookingStatus() ==> `, data);
+  const serviceResponse = { statusCode: HttpStatusCodes.CREATED };
+  try {
+    let response = await paymentAndBookingDb?.findAndUpdateBookingStatus(data);
+    serviceResponse.message = "Booking Status Updated Successfully !.";
+    serviceResponse.data = response;
+  } catch (error) {
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
+    logger.error(`ERROR occurred in ${TAG}.updateBookingStatus`, error);
     serviceResponse.error =
       "Failed to create admin due to technical difficulties";
   }

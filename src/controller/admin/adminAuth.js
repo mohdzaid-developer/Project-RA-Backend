@@ -46,7 +46,6 @@ export async function otpVerify(req, res, next) {
   }
 }
 
-
 export async function loginUser(req, res, next) {
   try {
     log.info(TAG + `.loginAdmin()`);

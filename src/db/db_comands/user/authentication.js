@@ -2,7 +2,7 @@ import UserAuthModule from "../../../models/user/authModel.js";
 
 export const createUser = async (data) => {
   try {
-    let res = await UserAuthModule.create({ ...data });
+    let res = await UserAuthModule.create({ ...data,isBooked:false });
     return res;
   } catch (error) {
     return error;
@@ -23,8 +23,8 @@ export const checkEmailOrPhoneExist = async (email, phone) => {
 export const findAndUpdate = async (data) => {
   try {
     let res = await UserAuthModule.updateOne(
-      { _id: data._id }, // Filter to match the document you want to update
-      { $set: { ...data } } // Update fields using $set operator
+      { _id: data._id },
+      { $set: { ...data } } 
     );
     return res;
   } catch (error) {

@@ -9,6 +9,11 @@ router.post(
   isAuthenticated,
   paymentController.verifyPaymentAndSave
 );
+router.patch(
+  "/booking",
+  isAuthenticated,
+  paymentController.updateBookingStatus
+);
 router.get(
   "/booking",
   paymentController.getAllBooking

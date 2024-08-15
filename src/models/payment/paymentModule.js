@@ -10,6 +10,18 @@ const paymentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
+  client_name:{
+    type:String,
+    required: true
+  },
+  email:{
+    type:String,
+    required: true
+  },
+  phone:{
+    type:String,
+    required: true
+  },
   amount: {
     type: Number,
     required: true,

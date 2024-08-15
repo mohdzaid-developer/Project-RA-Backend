@@ -5,6 +5,18 @@ const bookingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true
   },
+  client_name:{
+    type:String,
+    required: true
+  },
+  email:{
+    type:String,
+    required: true
+  },
+  phone:{
+    type:String,
+    required: true
+  },
   order_id: {
     type:String,
     required: true
@@ -40,11 +52,17 @@ const bookingSchema = new mongoose.Schema({
   no_of_children: {
     type: Number,
   },
+  total_amount: {
+    type: Number,
+  },
+  paid_amount: {
+    type: Number,
+  },
   status: {
     type: String,
   }
 });
 
-const Booking = mongoose.model('Booking', bookingSchema);
+const Booking = mongoose.model('BookingData', bookingSchema);
 
 export default  Booking;
