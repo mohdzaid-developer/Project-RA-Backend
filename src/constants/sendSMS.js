@@ -7,16 +7,11 @@ export const sendSMS = async (data) => {
     try {
         // Nodemailer transporter
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtpout.secureserver.net',
     auth: {
-        user: process.env.USER_EMAIL, // Your Gmail email address
-        pass: process.env.EMAIL_PASS_KEY // Your Gmail password
+        user: process.env.USER_EMAIL,
+        pass: process.env.EMAIL_PASS_KEY 
     },
-    tls: {
-        ciphers: 'SSLv3', // Add this option if you face SSL issues
-    },
-    logger: true, // Enable logging
-    debug: true, // Enable debug output
 });
 
         const { otp, email } = data;
@@ -34,7 +29,6 @@ const transporter = nodemailer.createTransport({
         console.log('Email sent successfully:', info.response);
         return 'Email sent successfully';
     } catch (error) {
-        console.error('Error sending email:lllllllllllllllllllllllllllllllllllllllllllllllls');
         console.error('Error sending email:', error);
         throw new Error('Failed to send email');
     }

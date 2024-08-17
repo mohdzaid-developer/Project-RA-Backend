@@ -19,6 +19,11 @@ router.get(
   paymentController.getAllBooking
 );
 router.get(
+  "/user/booking",
+  isAuthenticated,
+  paymentController.getAllMyBooking
+);
+router.get(
   "/",
   paymentController.getAllPayments
 );

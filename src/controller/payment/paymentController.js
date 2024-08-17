@@ -70,6 +70,18 @@ export async function getAllBooking(req, res, next) {
   }
 }
 
+export async function getAllMyBooking(req, res, next) {
+  try {
+    log.info(TAG + `.getAllBooking()`);
+    log.debug(`signup object = ${JSON.stringify(req.body)}`);
+    const authResponse = await paymentServices.getAllBooking({user_id: req.userSession.id,});
+    responseBuilder(authResponse, res, next, req);
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.getAllBooking()`, error);
+    next(error);
+  }
+}
+
 export async function getAllPayments(req, res, next) {
   const { plan, package: selectedDestination, destination,id } = req.query;
   try {

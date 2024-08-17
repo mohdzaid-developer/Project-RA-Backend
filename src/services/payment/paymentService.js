@@ -179,7 +179,6 @@ export async function getAllPayments(filter) {
   logger.info(`${TAG}.getAllPayments() ==> `, filter);
   const serviceResponse = { statusCode: HttpStatusCodes.CREATED };
   try {
-    //getAllBooking
     let response = await paymentAndBookingDb?.getAllPayments(filter);
     serviceResponse.message = "all payment list Fetched Successfully.";
     serviceResponse.data = response;
