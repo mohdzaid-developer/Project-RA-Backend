@@ -30,9 +30,7 @@ export async function getContactDetailsDetails() {
   try {
     let response = await getContactDetailsDetail();
     serviceResponse.statusCode = HttpStatusCodes.CREATED;
-    serviceResponse.data = {
-      response,
-    };
+    serviceResponse.data = [...response];
     return serviceResponse;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.getContactDetailsDetails`, error);

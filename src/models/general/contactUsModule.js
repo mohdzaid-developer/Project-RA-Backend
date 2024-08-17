@@ -16,7 +16,11 @@ const contactUsSchema = new mongoose.Schema({
   message:{
     type:String,
     require:true
-  }
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const contactUsModel = new mongoose.model("contactUs", contactUsSchema);
