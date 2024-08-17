@@ -1,5 +1,5 @@
 import Payment from "../../../models/payment/paymentModule.js";
-import Booking from "../../../models/booking/bookingSchema.js";
+import BookingSchema from "../../../models/booking/bookingSchema.js";
 import UserAuthModule from "../../../models/user/authModel.js";
 
 export const savePaymentDetails = async (data) => {
@@ -21,6 +21,10 @@ export const savePaymentDetails = async (data) => {
       { _id: data?.id },
       { $set: { isBooked:true } } 
     );
+    await BookingSchema.updateOne(
+      { order_id: data?.order_id },
+      { $set: { status:"Booked" } }
+    );
     return res;
   } catch (error) {
     return error;
@@ -28,7 +32,7 @@ export const savePaymentDetails = async (data) => {
 };
 
 export const saveBookingDetails = async (data) => {
-  const booking = new Booking({ ...data });
+  const booking = new BookingSchema({ ...data });
   try {
     await booking.save();
     return res;
@@ -38,10 +42,12 @@ export const saveBookingDetails = async (data) => {
 };
 
 export const findAndUpdateBookingStatus = async (data) => {
+  console.log("dddddddddddddddddddddddddddddddddddddd")
+  console.log(data)
   try {
-    let res = await Booking.updateOne(
+    let res = await BookingSchema.updateOne(
       { order_id: data.id },
-      { $set: { ...data } }
+      { $set: { status:data?.status } }
     );
     return res;
   } catch (error) {
@@ -51,7 +57,7 @@ export const findAndUpdateBookingStatus = async (data) => {
 
 export const getAllBooking = async (filter) => {
   try {
-    const response = await Booking.find(filter);
+    const response = await BookingSchema.find(filter);
     return response;
   } catch (error) {
     return error;

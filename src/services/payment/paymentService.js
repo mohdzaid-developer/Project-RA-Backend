@@ -4,6 +4,7 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import * as paymentAndBookingDb from "../../db/db_comands/payment/payment.js";
 import { checkEmailOrPhoneExist } from "../../db/db_comands/user/authentication.js";
+import { sendSMS } from "../../constants/sendSMS.js";
 
 const TAG = "payment.service";
 
@@ -69,7 +70,7 @@ export async function createOrder(user) {
         user_id: user?.id,
         phone: existedUser[0]?.phone,
         client_name: existedUser[0]?.fullName,
-        email:existedUser[0]?.email
+        email: existedUser[0]?.email,
       });
       serviceResponse.message = "order Created Success Fully !";
       serviceResponse.statusCode = HttpStatusCodes.CREATED;
@@ -112,18 +113,17 @@ export async function verifyPaymentAndSave(user) {
       .createHmac("sha256", "WeRnyn9uXXOidBHRsvgLRb97")
       .update(user?.orderId + "|" + user?.paymentId)
       .digest("hex");
-    const payment = await razorpayInstance.payments.fetch(user?.paymentId);
     if (expectedSignature === user?.signature) {
       await paymentAndBookingDb?.savePaymentDetails({
         ...user,
         phone: existedUser[0]?.phone,
         client_name: existedUser[0]?.fullName,
-        email:existedUser[0]?.email
+        email: existedUser[0]?.email,
       });
-      await paymentAndBookingDb?.findAndUpdateBookingStatus({
-        status: "booked",
+      let response = await paymentAndBookingDb?.getAllBooking({
         order_id: user.orderId,
       });
+      await sendSMS({ ...response, type: "trip" });
       serviceResponse.message = "Payment verified and saved.";
       serviceResponse.data = {
         success: true,
