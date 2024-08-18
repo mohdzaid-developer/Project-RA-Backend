@@ -4,7 +4,7 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import * as paymentAndBookingDb from "../../db/db_comands/payment/payment.js";
 import { checkEmailOrPhoneExist } from "../../db/db_comands/user/authentication.js";
-import { sendSMS } from "../../constants/sendSMS.js";
+import { adminBookingConfirmSMS, bookingConfirmSMS, sendSMS } from "../../constants/sendSMS.js";
 
 const TAG = "payment.service";
 
@@ -123,7 +123,8 @@ export async function verifyPaymentAndSave(user) {
       let response = await paymentAndBookingDb?.getAllBooking({
         order_id: user.orderId,
       });
-      await sendSMS({ ...response, type: "trip" });
+      await bookingConfirmSMS({ ...response, type: "trip" });
+      await adminBookingConfirmSMS({ ...response, type: "trip" });
       serviceResponse.message = "Payment verified and saved.";
       serviceResponse.data = {
         success: true,

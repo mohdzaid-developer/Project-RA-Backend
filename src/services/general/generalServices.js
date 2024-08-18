@@ -11,6 +11,7 @@ export async function saveContactDetailsDetail(data) {
     let response = await saveContactDetailsDetails(data);
     serviceResponse.statusCode = HttpStatusCodes.CREATED;
     serviceResponse.data = {
+      message:"Details submitted successfully.",
       success: true,
       response,
     };
