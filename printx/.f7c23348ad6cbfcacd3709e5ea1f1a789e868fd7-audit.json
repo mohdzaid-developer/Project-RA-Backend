@@ -6,11 +6,6 @@
     "auditLog": "D:\\New folder\\privateProject\\backend\\printx\\.f7c23348ad6cbfcacd3709e5ea1f1a789e868fd7-audit.json",
     "files": [
         {
-            "date": 1722707273190,
-            "name": "D:\\New folder\\privateProject\\backend\\printx\\printx-2024-08-03.log",
-            "hash": "0e0faa64d673286ba0319f89b2c4da1e5db2e097f19f67743b004a92dbd343da"
-        },
-        {
             "date": 1722781387992,
             "name": "D:\\New folder\\privateProject\\backend\\printx\\printx-2024-08-04.log",
             "hash": "b50237043ee2b1898acee6ea5ab915dda24162aadfacf1f75f3c3efcbc830877"
@@ -69,6 +64,11 @@
             "date": 1723881300382,
             "name": "D:\\New folder\\privateProject\\backend\\printx\\printx-2024-08-17.log",
             "hash": "bac1caf4df72c827bf8bbefecc62d6c99e23620758fc07d7f11756e0334ace61"
+        },
+        {
+            "date": 1724056683068,
+            "name": "D:\\New folder\\privateProject\\backend\\printx\\printx-2024-08-19.log",
+            "hash": "a5c362142c414637649829cb73c9a9f9f1260c3f5921f61cd9f9fa1afa2241de"
         }
     ],
     "hashType": "sha256"

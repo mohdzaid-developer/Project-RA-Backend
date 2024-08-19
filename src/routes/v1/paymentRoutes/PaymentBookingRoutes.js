@@ -1,11 +1,11 @@
-import * as paymentController from "../../../controller/payment/paymentController.js";
+import * as paymentController from "../../../controller/booking-payment/paymentBookingController.js";
 import { Router } from "express";
 import { isAdmin, isAuthenticated } from "../../../middleware/isAuthenticate.js";
 const router = Router();
 
 router.post("/create-order", isAuthenticated, paymentController.createOrder);
 router.post(
-  "/verify-payment",
+  "/verify-payment-booking",
   isAuthenticated,
   paymentController.verifyPaymentAndSave
 );
@@ -24,7 +24,7 @@ router.get(
   paymentController.getAllMyBooking
 );
 router.get(
-  "/",
+  "/payment",
   paymentController.getAllPayments
 );
 

@@ -1,6 +1,6 @@
 import { responseBuilder } from "../../helper/response.js";
 import log from "../../logger/index.js";
-import * as paymentServices from "../../services/payment/paymentService.js";
+import * as paymentServices from "../../services/booking-payment/paymentBookingService.js";
 
 const TAG = "controller.payment";
 

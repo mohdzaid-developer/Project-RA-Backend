@@ -8,13 +8,14 @@ import { adminBookingConfirmSMS, bookingConfirmSMS, sendSMS } from "../../consta
 
 const TAG = "payment.service";
 
-const razorpayInstance = new Razorpay({
-  key_id: "rzp_test_e6zf5ZgkpupNAu",
-  key_secret: "WeRnyn9uXXOidBHRsvgLRb97",
-});
-
 export async function createOrder(user) {
   logger.info(`${TAG}.createOrder() ==> `, user);
+//   RAZOR_PAY_SECRET=WeRnyn9uXXOidBHRsvgLRb97
+// RAZOR_PAY_KEY=rzp_test_e6zf5ZgkpupNAu
+  const razorpayInstance = new Razorpay({
+    key_id: process.env.RAZOR_PAY_KEY,
+    key_secret: process.env.RAZOR_PAY_SECRET,
+  });
   const serviceResponse = { statusCode: HttpStatusCodes.CREATED };
   if (!user) {
     serviceResponse.message = "invalid request with unauthorized token";
