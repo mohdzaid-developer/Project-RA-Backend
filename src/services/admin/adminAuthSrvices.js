@@ -164,6 +164,7 @@ export async function otpVerify(user) {
               const accessToken = await generateAccessToken({
                 id: existedUser._id,
                 email: existedUser.email,
+                role: "admin"
               });
               serviceResponse.statusCode = HttpStatusCodes.OK;
               serviceResponse.data = {

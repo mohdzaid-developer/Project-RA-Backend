@@ -42,13 +42,11 @@ export const saveBookingDetails = async (data) => {
 };
 
 export const findAndUpdateBookingStatus = async (data) => {
-  console.log("dddddddddddddddddddddddddddddddddddddd")
-  console.log(data)
   try {
     let res = await BookingSchema.updateOne(
       { order_id: data.id },
       { $set: { status:data?.status } }
-    );
+    )
     return res;
   } catch (error) {
     return error;
@@ -57,7 +55,7 @@ export const findAndUpdateBookingStatus = async (data) => {
 
 export const getAllBooking = async (filter) => {
   try {
-    const response = await BookingSchema.find(filter);
+    const response = await BookingSchema.find(filter).sort({ createdAt: -1 })
     return response;
   } catch (error) {
     return error;
@@ -66,7 +64,7 @@ export const getAllBooking = async (filter) => {
 
 export const getAllPayments = async (filter) => {
   try {
-    const response = await Payment.find(filter);
+    const response = await Payment.find(filter).sort({ createdAt: -1 })
     return response;
   } catch (error) {
     return error;
@@ -75,7 +73,7 @@ export const getAllPayments = async (filter) => {
 
 export const getAllUsers = async (filter) => {
   try {
-    const response = await UserAuthModule.find(filter);
+    const response = await UserAuthModule.find(filter).sort({ createdAt: -1 })
     return response;
   } catch (error) {
     return error;
