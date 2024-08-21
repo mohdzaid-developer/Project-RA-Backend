@@ -13,7 +13,6 @@ export const sendSMS = async (data) => {
 
     const { otp, email } = data;
 
-    // Email message
     const mailOptions = {
       from: process.env.USER_EMAIL,
       to: email,
@@ -92,10 +91,14 @@ export const sendSMS = async (data) => {
 </html>`,
     };
 
-    // Send email
-    let info = await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully:", info.response);
-    return "Email sent successfully";
+    // Send email asynchronously
+    transporter
+      .sendMail(mailOptions)
+      .then((info) => console.log("Email sent successfully:", info.response))
+      .catch((error) => console.error("Error sending email:", error));
+
+    // Return immediately
+    return "Email process initiated successfully";
   } catch (error) {
     console.error("Error sending email:", error);
     throw new Error("Failed to send email");
@@ -113,7 +116,6 @@ export const bookingConfirmSMS = async (data) => {
       },
     });
 
-    // Email message
     const userTripConfirmation = {
       from: process.env.USER_EMAIL,
       to: data["0"].email,
@@ -194,10 +196,14 @@ export const bookingConfirmSMS = async (data) => {
 `,
     };
 
-    // Send email
-    let info = await transporter.sendMail(userTripConfirmation);
-    console.log("Email sent successfully:", info.response);
-    return "Email sent successfully";
+    // Send email asynchronously
+    transporter
+      .sendMail(userTripConfirmation)
+      .then((info) => console.log("Email sent successfully:", info.response))
+      .catch((error) => console.error("Error sending email:", error));
+
+    // Return immediately
+    return "Email process initiated successfully";
   } catch (error) {
     console.error("Error sending email:", error);
     throw new Error("Failed to send email");
@@ -215,7 +221,6 @@ export const adminBookingConfirmSMS = async (data) => {
       },
     });
 
-    // Email message
     const userTripConfirmation = {
       from: process.env.USER_EMAIL,
       to: process.env.USER_EMAIL,
@@ -296,10 +301,46 @@ export const adminBookingConfirmSMS = async (data) => {
 `,
     };
 
-    // Send email
-    let info = await transporter.sendMail(userTripConfirmation);
-    console.log("Email sent successfully:", info.response);
-    return "Email sent successfully";
+    // Send email asynchronously
+    transporter
+      .sendMail(userTripConfirmation)
+      .then((info) => console.log("Email sent successfully:", info.response))
+      .catch((error) => console.error("Error sending email:", error));
+
+    // Return immediately
+    return "Email process initiated successfully";
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw new Error("Failed to send email");
+  }
+};
+
+// Function to send SMS
+export const customBookingConfirmSMS = async (data) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtpout.secureserver.net",
+      auth: {
+        user: process.env.USER_EMAIL,
+        pass: process.env.EMAIL_PASS_KEY,
+      },
+    });
+
+    const userTripConfirmation = {
+      from: process.env.USER_EMAIL,
+      to: data?.email,
+      subject: "Trip Confirmation",
+      html: `<a>${data?.accessToken}</a>`,
+    };
+
+    // Send email asynchronously
+    transporter
+      .sendMail(userTripConfirmation)
+      .then((info) => console.log("Email sent successfully:", info.response))
+      .catch((error) => console.error("Error sending email:", error));
+
+    // Return immediately
+    return "Email process initiated successfully";
   } catch (error) {
     console.error("Error sending email:", error);
     throw new Error("Failed to send email");

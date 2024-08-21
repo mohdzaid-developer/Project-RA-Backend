@@ -19,7 +19,7 @@ const bookingSchema = new mongoose.Schema({
   },
   order_id: {
     type:String,
-    required: true
+    // required: true
   },
   destination: {
     type: String,
@@ -65,4 +65,4 @@ const bookingSchema = new mongoose.Schema({
 
 const Booking = mongoose.model('BookingData', bookingSchema);
 
-export default  Booking;
+export default Booking;

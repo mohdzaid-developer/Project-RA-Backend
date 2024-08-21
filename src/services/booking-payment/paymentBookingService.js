@@ -4,14 +4,18 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import * as paymentAndBookingDb from "../../db/db_comands/payment/payment.js";
 import { checkEmailOrPhoneExist } from "../../db/db_comands/user/authentication.js";
-import { adminBookingConfirmSMS, bookingConfirmSMS, sendSMS } from "../../constants/sendSMS.js";
+import {
+  adminBookingConfirmSMS,
+  bookingConfirmSMS,
+  customBookingConfirmSMS,
+  sendSMS,
+} from "../../constants/sendSMS.js";
+import { generateAccessToken } from "../../helper/authentication.js";
 
 const TAG = "payment.service";
 
 export async function createOrder(user) {
   logger.info(`${TAG}.createOrder() ==> `, user);
-//   RAZOR_PAY_SECRET=WeRnyn9uXXOidBHRsvgLRb97
-// RAZOR_PAY_KEY=rzp_test_e6zf5ZgkpupNAu
   const razorpayInstance = new Razorpay({
     key_id: process.env.RAZOR_PAY_KEY,
     key_secret: process.env.RAZOR_PAY_SECRET,
@@ -87,6 +91,75 @@ export async function createOrder(user) {
     }
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.createOrder`, error);
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
+    serviceResponse.error =
+      "Failed to create admin due to technical difficulties";
+  }
+  return serviceResponse;
+}
+
+export async function createCustomOrder(user) {
+  logger.info(`${TAG}.createCustomOrder() ==> `, user);
+  const serviceResponse = { statusCode: HttpStatusCodes.CREATED };
+  if (!user) {
+    serviceResponse.message = "invalid request with unauthorized token";
+    serviceResponse.statusCode = HttpStatusCodes.UNAUTHORIZED;
+    serviceResponse.data = null;
+    return serviceResponse;
+  }
+
+  const existedUser = await checkEmailOrPhoneExist(user?.email);
+  if (existedUser?.length == 0) {
+    serviceResponse.message = "Invalid User";
+    serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+    return serviceResponse;
+  }
+  try {
+    let response = await paymentAndBookingDb?.saveBookingDetails({
+      ...user,
+      status: "request",
+      user_id: user?.id,
+      phone: existedUser[0]?.phone,
+      client_name: existedUser[0]?.fullName,
+      email: existedUser[0]?.email,
+    });
+    serviceResponse.message = "Custom Order Request Created SuccessFully !";
+    serviceResponse.statusCode = HttpStatusCodes.CREATED;
+    serviceResponse.data = {
+      success: true,
+      response,
+    };
+    return serviceResponse;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.createCustomOrder`, error);
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
+    serviceResponse.error =
+      "Failed to create admin due to technical difficulties";
+  }
+  return serviceResponse;
+}
+
+export async function updateCustomOrder(user) {
+  logger.info(`${TAG}.updateCustomOrder() ==> `, user);
+  const serviceResponse = { statusCode: HttpStatusCodes.CREATED };
+  try {
+    const accessToken = await generateAccessToken({
+    bookingId:user?._id
+    });
+    let response = await paymentAndBookingDb?.findAndUpdateBookingStatus({
+      ...user,
+      status: "pending",
+    });
+    await customBookingConfirmSMS({email:user?.email,accessToken})
+    serviceResponse.message = "Custom Order Request Created SuccessFully !";
+    serviceResponse.statusCode = HttpStatusCodes.CREATED;
+    serviceResponse.data = {
+      success: true,
+      response,
+    };
+    return serviceResponse;
+  } catch (error) {
+    logger.error(`ERROR occurred in ${TAG}.updateCustomOrder`, error);
     serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     serviceResponse.error =
       "Failed to create admin due to technical difficulties";

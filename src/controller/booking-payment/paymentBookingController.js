@@ -9,7 +9,8 @@ export async function createOrder(req, res, next) {
     log.info(TAG + `.createOrder ()`);
     log.debug(`signup object = ${JSON.stringify(req.body)}`);
     const user = req.body;
-    const authResponse = await paymentServices.createOrder({
+    let authResponse;
+    authResponse = await paymentServices.createOrder({
       ...user,
       id: req.userSession.id,
       email: req.userSession.email,
@@ -17,6 +18,42 @@ export async function createOrder(req, res, next) {
     responseBuilder(authResponse, res, next, req);
   } catch (error) {
     log.error(`ERROR occurred in ${TAG}.createOrder ()`, error);
+    next(error);
+  }
+}
+
+export async function createCustomOrder(req, res, next) {
+  try {
+    log.info(TAG + `.createCustomOrder ()`);
+    log.debug(`signup object = ${JSON.stringify(req.body)}`);
+    const user = req.body;
+    let authResponse;
+    authResponse = await paymentServices.createCustomOrder({
+      ...user,
+      id: req.userSession.id,
+      email: req.userSession.email,
+    });
+
+    responseBuilder(authResponse, res, next, req);
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.createCustomOrder ()`, error);
+    next(error);
+  }
+}
+
+export async function updateCustomOrder(req, res, next) {
+  try {
+    log.info(TAG + `.updateCustomOrder ()`);
+    log.debug(`updateCustomOrder object = ${JSON.stringify(req.body)}`);
+    const user = req.body;
+    let authResponse;
+    authResponse = await paymentServices.updateCustomOrder({
+      ...user
+    });
+
+    responseBuilder(authResponse, res, next, req);
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.updateCustomOrder()`, error);
     next(error);
   }
 }
@@ -54,7 +91,13 @@ export async function updateBookingStatus(req, res, next) {
 }
 
 export async function getAllBooking(req, res, next) {
-  const { plan, package: selectedDestination, destination, id } = req.query;
+  const {
+    plan,
+    package: selectedDestination,
+    destination,
+    id,
+    status,
+  } = req.query;
   try {
     log.info(TAG + `.getAllBooking()`);
     log.debug(`signup object = ${JSON.stringify(req.body)}`);
@@ -64,6 +107,7 @@ export async function getAllBooking(req, res, next) {
       filter.package = selectedDestination;
     if (destination && destination != "") filter.destination = destination;
     if (id && id != "") filter.order_id = id;
+    if (status && status != "") filter.status = status;
 
     const authResponse = await paymentServices.getAllBooking(filter);
     responseBuilder(authResponse, res, next, req);
