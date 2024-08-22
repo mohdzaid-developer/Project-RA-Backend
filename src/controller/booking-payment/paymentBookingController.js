@@ -97,6 +97,7 @@ export async function getAllBooking(req, res, next) {
     destination,
     id,
     status,
+    bookingId
   } = req.query;
   try {
     log.info(TAG + `.getAllBooking()`);
@@ -108,6 +109,8 @@ export async function getAllBooking(req, res, next) {
     if (destination && destination != "") filter.destination = destination;
     if (id && id != "") filter.order_id = id;
     if (status && status != "") filter.status = status;
+    if (bookingId && bookingId != "") filter._id = bookingId;
+    if (bookingId && bookingId != "") filter.bookingId = bookingId;
 
     const authResponse = await paymentServices.getAllBooking(filter);
     responseBuilder(authResponse, res, next, req);

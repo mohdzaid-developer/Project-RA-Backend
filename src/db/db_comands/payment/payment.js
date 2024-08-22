@@ -62,7 +62,6 @@ export const findAndUpdateBookingStatus = async (data) => {
         { $set: { status: data?.status } }
       );
     }
-    console.log("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
     return response;
   } catch (error) {
     return error;
@@ -73,14 +72,23 @@ export const getAllBooking = async (filter) => {
   try {
     let response;
     if (filter?.status == "request") {
-      response = await BookingSchema.find({ status: "request" }).sort({
+      response = await BookingSchema.find({
+        ...filter,
+        status: "request",
+      }).sort({
         createdAt: -1,
       });
     } else {
-      response = await BookingSchema.find({
-        ...filter,
-        status: { $ne: "request" },
-      }).sort({ createdAt: -1 });
+      if (filter?.bookingId != null) {
+        response = await BookingSchema.find({
+          _id: filter?._id,
+        });
+      } else {
+        response = await BookingSchema.find({
+          ...filter,
+          status: { $ne: "request" },
+        }).sort({ createdAt: -1 });
+      }
     }
     return response;
   } catch (error) {

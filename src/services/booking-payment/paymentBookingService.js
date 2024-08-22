@@ -7,8 +7,7 @@ import { checkEmailOrPhoneExist } from "../../db/db_comands/user/authentication.
 import {
   adminBookingConfirmSMS,
   bookingConfirmSMS,
-  customBookingConfirmSMS,
-  sendSMS,
+  customBookingConfirmSMS
 } from "../../constants/sendSMS.js";
 import { generateAccessToken } from "../../helper/authentication.js";
 
