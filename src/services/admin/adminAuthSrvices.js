@@ -218,14 +218,14 @@ export async function loginUser(user) {
       const updatePromise = adminAuth.findAndUpdate({ ...user, isValid: true });
       const smsPromise = sendSMS({ otp, email: user.email });
 
-      const [token, refreshToken] = await Promise.all([tokenPromise, refreshTokenPromise]);
+      // const [token] = await Promise.all([tokenPromise]);
       await Promise.all([updatePromise, smsPromise]);
 
       logger.debug("saved user::" + user);
       serviceResponse.data = {
         message: "please check your email for verification code.",
-        accessToken:token,
-        refreshToken,
+        accessToken:tokenPromise,
+        refreshToken:refreshTokenPromise
       };
     } else {
       serviceResponse.message = "invalid email !";

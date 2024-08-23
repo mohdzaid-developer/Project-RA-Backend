@@ -3,6 +3,7 @@ import { Router } from "express";
 import {
   isAdmin,
   isAuthenticated,
+  isDecoder,
 } from "../../../middleware/isAuthenticate.js";
 const router = Router();
 
@@ -10,13 +11,11 @@ router.post("/create-order", isAuthenticated, paymentController.createOrder);
 router
   .route("/create-custom-order")
   .post(isAuthenticated, paymentController.createCustomOrder)
-  .patch(isAuthenticated, paymentController.updateCustomOrder);
+  .patch(isAuthenticated, paymentController.updateCustomOrder)
+  .get(isDecoder, paymentController.getCustomOrder)
 
 router.post(
-  "/verify-payment-booking",
-  isAuthenticated,
-  paymentController.verifyPaymentAndSave
-);
+  "/capture",paymentController?.capturePayment);
 router.patch(
   "/booking",
   isAuthenticated,

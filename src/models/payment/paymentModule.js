@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
 const paymentSchema = new mongoose.Schema({
-  paymentId: {
+  payment_id: {
     type: String,
     required: true,
     unique: true,
   },
-  userId: {
+  user_id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
@@ -26,7 +26,7 @@ const paymentSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  orderId: {
+  order_id: {
     type: String,
     required: true,
   },
@@ -35,53 +35,14 @@ const paymentSchema = new mongoose.Schema({
     required: true,
     default: "USD",
   },
-//   paymentMethod: {
-//     type: String,
-//     required: true,
-//     enum: ["Credit Card", "Debit Card", "PayPal", "Bank Transfer", "Other"],
-//   },
-//   cardDetails: {
-//     cardNumber: {
-//       type: String,
-//       required: function () {
-//         return (
-//           this.paymentMethod === "Credit Card" ||
-//           this.paymentMethod === "Debit Card"
-//         );
-//       },
-//     },
-//     cardHolderName: {
-//       type: String,
-//       required: function () {
-//         return (
-//           this.paymentMethod === "Credit Card" ||
-//           this.paymentMethod === "Debit Card"
-//         );
-//       },
-//     },
-//     expiryDate: {
-//       type: String,
-//       required: function () {
-//         return (
-//           this.paymentMethod === "Credit Card" ||
-//           this.paymentMethod === "Debit Card"
-//         );
-//       },
-//     },
-//     cvv: {
-//       type: String,
-//       required: function () {
-//         return (
-//           this.paymentMethod === "Credit Card" ||
-//           this.paymentMethod === "Debit Card"
-//         );
-//       },
-//     },
-//   },
+  transaction_type: {
+    type: String,
+    required: true,
+  },
   status: {
     type: String,
     required: true,
-    enum: ["Pending", "Completed", "Failed"],
+    enum: ["Pending", "Completed", "Failed","paid"],
     default: "Pending",
   },
   createdAt: {
@@ -99,6 +60,6 @@ paymentSchema.pre("save", function (next) {
   next();
 });
 
-const Payment = mongoose.model("Payment", paymentSchema);
+const Payment = mongoose.model("PaymentDetails", paymentSchema);
 
 export default Payment;

@@ -7,7 +7,7 @@ import { checkEmailOrPhoneExist } from "../../db/db_comands/user/authentication.
 import {
   adminBookingConfirmSMS,
   bookingConfirmSMS,
-  customBookingConfirmSMS
+  customBookingConfirmSMS,
 } from "../../constants/sendSMS.js";
 import { generateAccessToken } from "../../helper/authentication.js";
 
@@ -15,6 +15,7 @@ const TAG = "payment.service";
 
 export async function createOrder(user) {
   logger.info(`${TAG}.createOrder() ==> `, user);
+
   const razorpayInstance = new Razorpay({
     key_id: process.env.RAZOR_PAY_KEY,
     key_secret: process.env.RAZOR_PAY_SECRET,
@@ -47,28 +48,25 @@ export async function createOrder(user) {
     );
     return selectedDate >= oneMonthAfter;
   }
-  let correctDateOrNot = await isAtLeastOneMonthAfter(
-    user?.bookingDetails?.start_date
-  );
+
+  let correctDateOrNot = await isAtLeastOneMonthAfter(user?.start_date);
   if (correctDateOrNot == false) {
     serviceResponse.message =
       "the one month of time required plz select date one month after.";
     serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
     return serviceResponse;
   }
-  const { amount, currency, receipt } = user;
+  const { currency, receipt } = user;
   try {
     const options = {
-      amount: amount * 100,
+      amount: user?.total_amount * 100,
       currency,
       receipt,
-      payment_capture: 1,
     };
-
     const order = await razorpayInstance.orders.create(options);
     if (order) {
       let response = await paymentAndBookingDb?.saveBookingDetails({
-        ...user?.bookingDetails,
+        ...user,
         order_id: order?.id,
         status: "pending",
         user_id: user?.id,
@@ -141,15 +139,33 @@ export async function createCustomOrder(user) {
 export async function updateCustomOrder(user) {
   logger.info(`${TAG}.updateCustomOrder() ==> `, user);
   const serviceResponse = { statusCode: HttpStatusCodes.CREATED };
+  const razorpayInstance = new Razorpay({
+    key_id: process.env.RAZOR_PAY_KEY,
+    key_secret: process.env.RAZOR_PAY_SECRET,
+  });
   try {
+    const options = {
+      amount: user?.total_amount * 100,
+      // currency:"INR"
+      // receipt,
+    };
+
+    const order = await razorpayInstance.orders.create(options);
     const accessToken = await generateAccessToken({
-    bookingId:user?._id
+      bookingId: user?._id,
     });
     let response = await paymentAndBookingDb?.findAndUpdateBookingStatus({
       ...user,
+      order_id:order?.id,
       status: "pending",
     });
-    await customBookingConfirmSMS({email:user?.email,accessToken})
+    await customBookingConfirmSMS({
+      email: user?.email,
+      accessToken,
+      plan: user?.plan,
+      destination: user?.destination,
+      package: user?.package,
+    });
     serviceResponse.message = "Custom Order Request Created SuccessFully !";
     serviceResponse.statusCode = HttpStatusCodes.CREATED;
     serviceResponse.data = {
@@ -166,50 +182,37 @@ export async function updateCustomOrder(user) {
   return serviceResponse;
 }
 
-export async function verifyPaymentAndSave(user) {
-  logger.info(`${TAG}.verifyPaymentAndSave() ==> `, user);
+export async function capturePayment(req) {
+  logger.info(`${TAG}.capturePayment() ==> `, req);
   const serviceResponse = { statusCode: HttpStatusCodes.CREATED };
-  if (!user) {
-    serviceResponse.message = "invalid request with unauthorized token";
-    serviceResponse.statusCode = HttpStatusCodes.UNAUTHORIZED;
-    serviceResponse.data = null;
-    return serviceResponse;
-  }
-  const existedUser = await checkEmailOrPhoneExist(user?.email);
-  if (existedUser?.length == 0) {
-    serviceResponse.message = "Invalid User";
-    serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
-    return serviceResponse;
-  }
+
   try {
-    const expectedSignature = crypto
-      .createHmac("sha256", "WeRnyn9uXXOidBHRsvgLRb97")
-      .update(user?.orderId + "|" + user?.paymentId)
-      .digest("hex");
-    if (expectedSignature === user?.signature) {
-      await paymentAndBookingDb?.savePaymentDetails({
-        ...user,
-        phone: existedUser[0]?.phone,
-        client_name: existedUser[0]?.fullName,
-        email: existedUser[0]?.email,
-      });
-      let response = await paymentAndBookingDb?.getAllBooking({
-        order_id: user.orderId,
-      });
-      await bookingConfirmSMS({ ...response, type: "trip" });
-      await adminBookingConfirmSMS({ ...response, type: "trip" });
-      serviceResponse.message = "Payment verified and saved.";
-      serviceResponse.data = {
-        success: true,
-      };
-      return serviceResponse;
-    } else {
-      serviceResponse.message = "invalid !";
-      serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
-    }
+    const shasum = crypto.createHmac("sha256", "WeRnyn9uXXOidBHRsvgLRb97");
+    shasum.update(JSON.stringify(req.body));
+    const digest = shasum.digest("hex");
+
+    let response = await paymentAndBookingDb?.getAllBooking({
+      order_id: req.body.payload.payment.entity.order_id,
+    });
+
+    await paymentAndBookingDb?.savePaymentDetails({
+      user_id: response[0]?.user_id,
+      order_id: req.body.payload.payment.entity.order_id,
+      payment_id: req.body.payload.payment.entity.id,
+      transaction_type: req.body.payload.payment.entity.method,
+      currency: req.body.payload.payment.entity.currency,
+      phone: response[0]?.phone,
+      client_name: response[0]?.client_name,
+      email: response[0]?.email,
+      amount: req.body.payload.payment.entity.amount,
+      status: "paid",
+    });
+    await bookingConfirmSMS({ ...response });
+    await adminBookingConfirmSMS({ ...response });
+    return serviceResponse;
   } catch (error) {
     serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
-    logger.error(`ERROR occurred in ${TAG}.verifyPaymentAndSave`, error);
+    logger.error(`ERROR occurred in ${TAG}.capturePayment`, error);
     serviceResponse.error =
       "Failed to create admin due to technical difficulties";
   }
@@ -236,13 +239,35 @@ export async function getAllBooking(filter) {
   logger.info(`${TAG}.getAllBooking() ==> `, filter);
   const serviceResponse = { statusCode: HttpStatusCodes.CREATED };
   try {
-    //getAllBooking
     let response = await paymentAndBookingDb?.getAllBooking(filter);
     serviceResponse.message = "booked list Fetched Successfully.";
     serviceResponse.data = response;
   } catch (error) {
     serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     logger.error(`ERROR occurred in ${TAG}.getAllBooking`, error);
+    serviceResponse.error =
+      "Failed to create admin due to technical difficulties";
+  }
+  return serviceResponse;
+}
+
+export async function getCustomOrder(filter) {
+  logger.info(`${TAG}.getCustomOrder() ==> `, filter);
+  const serviceResponse = { statusCode: HttpStatusCodes.CREATED };
+  try {
+    let response = await paymentAndBookingDb?.getAllBooking({
+      _id: filter?.bookingId,
+    });
+    if (response[0]?.status != "pending") {
+      serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+      serviceResponse.message = "Already Booked !";
+    } else {
+      serviceResponse.message = "booked list Fetched Successfully.";
+      serviceResponse.data = response[0];
+    }
+  } catch (error) {
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
+    logger.error(`ERROR occurred in ${TAG}.getCustomOrder`, error);
     serviceResponse.error =
       "Failed to create admin due to technical difficulties";
   }

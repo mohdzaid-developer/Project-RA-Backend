@@ -3,22 +3,11 @@ import BookingSchema from "../../../models/booking/bookingSchema.js";
 import UserAuthModule from "../../../models/user/authModel.js";
 
 export const savePaymentDetails = async (data) => {
-  const payment = new Payment({
-    paymentId: data?.paymentId,
-    userId: data?.id,
-    amount: data.amount,
-    currency: data.currency,
-    paymentMethod: "Razorpay",
-    status: "Completed",
-    orderId: data?.order_id,
-    email: data?.email,
-    phone: data?.phone,
-    client_name: data?.client_name,
-  });
+  const payment = new Payment({...data});
   try {
-    await payment.save();
+    let res=await payment.save();
     await UserAuthModule.updateOne(
-      { _id: data?.id },
+      { _id: data?.user_id },
       { $set: { isBooked: true } }
     );
     await BookingSchema.updateOne(

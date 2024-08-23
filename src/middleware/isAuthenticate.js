@@ -38,14 +38,10 @@ export function isAdmin(req, res, next) {
   const token = extractToken(req);
 
   if (!token) {
-    console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-    console.log(token);
     return sendUnauthorizedResponse(res, "Token Required.");
   }
   try {
     const decodedToken = verifyAccessToken(token);
-    console.log("lkkkkkkkkkkkiiiiiiiiiiiiiiiiiiiiii");
-    console.log(decodedToken);
     if (decodedToken?.role === "admin") {
       req.userSession = decodedToken ? createUserSession(decodedToken) : null;
       logger.debug("LOGGED IN USER:", req.userSession);
@@ -58,6 +54,28 @@ export function isAdmin(req, res, next) {
     }
   } catch (error) {
     logger.error("ERROR occurred in isAdmin() ", error);
+    sendErrorResponse(error, res);
+  }
+}
+
+export function isDecoder(req, res, next) {
+  if (!AUTHENTICATION.enabled) {
+    return next();
+  }
+
+  logger.info(`${TAG}.isDecoder()`);
+  const token = extractToken(req);
+
+  if (!token) {
+    return sendUnauthorizedResponse(res, "Token Required.");
+  }
+  try {
+    const decodedToken = verifyAccessToken(token);
+      req.userSession = decodedToken ??null;
+      logger.debug("LOGGED IN USER:", req.userSession);
+      next();
+  } catch (error) {
+    logger.error("ERROR occurred in isDecoder() ", error);
     sendErrorResponse(error, res);
   }
 }

@@ -7,7 +7,7 @@ const TAG = "controller.payment";
 export async function createOrder(req, res, next) {
   try {
     log.info(TAG + `.createOrder ()`);
-    log.debug(`signup object = ${JSON.stringify(req.body)}`);
+    log.debug(`createOrder object = ${JSON.stringify(req.body)}`);
     const user = req.body;
     let authResponse;
     authResponse = await paymentServices.createOrder({
@@ -58,18 +58,30 @@ export async function updateCustomOrder(req, res, next) {
   }
 }
 
-export async function verifyPaymentAndSave(req, res, next) {
+export async function getCustomOrder(req, res, next) {
   try {
-    log.info(TAG + `.verifyPaymentAndSave()`);
-    log.debug(`signup object = ${JSON.stringify(req.body)}`);
-    const authResponse = await paymentServices.verifyPaymentAndSave({
-      ...req.body,
-      id: req.userSession.id,
-      email: req.userSession.email,
+    log.info(TAG + `.getCustomOrder ()`);
+    log.debug(`getCustomOrder object = ${JSON.stringify(req.body)}`);
+    const user = req.userSession;
+    let authResponse;
+    authResponse = await paymentServices.getCustomOrder({
+      ...user
     });
+
     responseBuilder(authResponse, res, next, req);
   } catch (error) {
-    log.error(`ERROR occurred in ${TAG}.verifyPaymentAndSave()`, error);
+    log.error(`ERROR occurred in ${TAG}.getCustomOrder()`, error);
+    next(error);
+  }
+}
+
+export async function capturePayment(req, res, next) {
+  try {
+    log.info(TAG + `.captureOrder()`);
+    const authResponse = await paymentServices.capturePayment(req);
+    responseBuilder(authResponse, res, next, req);
+  } catch (error) {
+    log.error(`ERROR occurred in ${TAG}.captureOrder()`, error);
     next(error);
   }
 }
