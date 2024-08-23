@@ -42,6 +42,7 @@ export const findAndUpdateBookingStatus = async (data) => {
             start_date: data?.start_date,
             end_date: data?.end_date,
             status: "pending",
+            order_id:data?.order_id
           },
         }
       );
