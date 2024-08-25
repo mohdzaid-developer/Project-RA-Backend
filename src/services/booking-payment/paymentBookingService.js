@@ -258,7 +258,8 @@ export async function getCustomOrder(filter) {
     let response = await paymentAndBookingDb?.getAllBooking({
       _id: filter?.bookingId,
     });
-    if (response?.data[0]?.data?.status != "pending") {
+
+    if (response?.data[0]?.status != "pending") {
       serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
       serviceResponse.message = "Already Booked !";
     } else {
