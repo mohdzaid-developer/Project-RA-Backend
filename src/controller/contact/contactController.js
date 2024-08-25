@@ -20,7 +20,15 @@ export async function saveContactDetails(req, res, next) {
 export async function getContactDetails(req, res, next) {
   try {
     log.info(TAG + `.getContactDetailsDetails ()`);
-    const authResponse = await generalServices.getContactDetails();
+    const {pageNum,
+    pageSize,
+    orderId
+  } = req.query;
+  const filter = {pageNum:1,pageSize:10};
+  if (orderId && orderId != "") filter.order_id = orderId;
+  if(pageNum && pageNum !="")filter.pageNum = pageNum;
+  if(pageSize && pageSize !="")filter.pageSize = pageSize;
+    const authResponse = await generalServices.getContactDetails(filter);
     responseBuilder(authResponse, res, next, req);
   } catch (error) {
     log.error(`ERROR occurred in ${TAG}.getContactDetailsDetails ()`, error);
@@ -45,7 +53,16 @@ export async function saveNewsLetter(req, res, next) {
 export async function getNewsLetter(req, res, next) {
   try {
     log.info(TAG + `.getNewsLetter ()`);
-    const authResponse = await generalServices.getNewsLetter();
+    const {
+      pageNum,
+      pageSize,
+      orderId
+    } = req.query;
+    const filter = {pageNum:1,pageSize:10};
+    if (orderId && orderId != "") filter.order_id = orderId;
+    if(pageNum && pageNum !="")filter.pageNum = pageNum;
+    if(pageSize && pageSize !="")filter.pageSize = pageSize;
+    const authResponse = await generalServices.getNewsLetter(filter);
     responseBuilder(authResponse, res, next, req);
   } catch (error) {
     log.error(`ERROR occurred in ${TAG}.getNewsLetter ()`, error);

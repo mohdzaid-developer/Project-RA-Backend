@@ -3,9 +3,9 @@ import BookingSchema from "../../../models/booking/bookingSchema.js";
 import UserAuthModule from "../../../models/user/authModel.js";
 
 export const savePaymentDetails = async (data) => {
-  const payment = new Payment({...data});
+  const payment = new Payment({ ...data });
   try {
-    let res=await payment.save();
+    let res = await payment.save();
     await UserAuthModule.updateOne(
       { _id: data?.user_id },
       { $set: { isBooked: true } }
@@ -42,7 +42,7 @@ export const findAndUpdateBookingStatus = async (data) => {
             start_date: data?.start_date,
             end_date: data?.end_date,
             status: "pending",
-            order_id:data?.order_id
+            order_id: data?.order_id,
           },
         }
       );
@@ -60,27 +60,46 @@ export const findAndUpdateBookingStatus = async (data) => {
 
 export const getAllBooking = async (filter) => {
   try {
+    let pagination={
+      pageNum:filter?.pageNum,
+      pageSize:filter?.pageSize
+    }
+
+    delete filter.pageNum
+    delete filter.pageSize
+    const totalResultsCount = await BookingSchema.countDocuments();
     let response;
     if (filter?.status == "request") {
       response = await BookingSchema.find({
         ...filter,
         status: "request",
-      }).sort({
-        createdAt: -1,
-      });
+      })
+        .sort({
+          createdAt: -1,
+        })
+        .skip((pagination?.pageNum - 1) * pagination?.pageSize)
+        .limit(pagination?.pageSize);
     } else {
-      if (filter?.bookingId != null) {
+      if (pagination?.bookingId != null) {
         response = await BookingSchema.find({
-          _id: filter?._id,
-        });
+          _id: pagination?._id,
+        })
+          .sort({
+            createdAt: -1,
+          })
+          .skip((pagination?.pageNum - 1) * pagination?.pageSize)
+          .limit(pagination?.pageSize);
       } else {
         response = await BookingSchema.find({
           ...filter,
           status: { $ne: "request" },
-        }).sort({ createdAt: -1 });
+        })
+          .sort({ createdAt: -1 })
+          .skip((pagination?.pageNum - 1) * pagination?.pageSize)
+          .limit(pagination?.pageSize);
       }
     }
-    return response;
+    return { data: response, totalResultsCount };
   } catch (error) {
     return error;
   }
@@ -88,8 +107,21 @@ export const getAllBooking = async (filter) => {
 
 export const getAllPayments = async (filter) => {
   try {
-    const response = await Payment.find(filter).sort({ createdAt: -1 });
-    return response;
+    let pagination={
+      pageNum:filter?.pageNum,
+      pageSize:filter?.pageSize
+    }
+
+    delete filter.pageNum
+    delete filter.pageSize
+    const totalResultsCount = await Payment.countDocuments();
+    const response = await Payment.find(filter)
+      .sort({
+        createdAt: -1,
+      })
+      .skip((pagination?.pageNum - 1) * pagination?.pageSize)
+      .limit(pagination?.pageSize);
+    return { data: response, totalResultsCount };
   } catch (error) {
     return error;
   }
@@ -97,8 +129,21 @@ export const getAllPayments = async (filter) => {
 
 export const getAllUsers = async (filter) => {
   try {
-    const response = await UserAuthModule.find(filter).sort({ createdAt: -1 });
-    return response;
+    let pagination={
+      pageNum:filter?.pageNum,
+      pageSize:filter?.pageSize
+    }
+
+    delete filter.pageNum
+    delete filter.pageSize
+    const totalResultsCount = await UserAuthModule.countDocuments();
+    const response = await UserAuthModule.find(filter)
+      .sort({
+        createdAt: -1,
+      })
+      .skip((pagination?.pageNum - 1) * pagination?.pageSize)
+      .limit(pagination?.pageSize);
+    return { data: response, totalResultsCount };
   } catch (error) {
     return error;
   }

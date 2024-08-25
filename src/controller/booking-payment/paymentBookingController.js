@@ -109,12 +109,14 @@ export async function getAllBooking(req, res, next) {
     destination,
     id,
     status,
-    bookingId
+    bookingId,
+    pageNum,
+    pageSize
   } = req.query;
   try {
     log.info(TAG + `.getAllBooking()`);
     log.debug(`signup object = ${JSON.stringify(req.body)}`);
-    const filter = {};
+    const filter = {pageNum:1,pageSize:10};
     if (plan && plan != "") filter.plan = plan;
     if (selectedDestination && selectedDestination != "")
       filter.package = selectedDestination;
@@ -123,6 +125,8 @@ export async function getAllBooking(req, res, next) {
     if (status && status != "") filter.status = status;
     if (bookingId && bookingId != "") filter._id = bookingId;
     if (bookingId && bookingId != "") filter.bookingId = bookingId;
+    if(pageNum && pageNum !="")filter.pageNum = pageNum;
+    if(pageSize && pageSize !="")filter.pageSize = pageSize;
 
     const authResponse = await paymentServices.getAllBooking(filter);
     responseBuilder(authResponse, res, next, req);
@@ -136,6 +140,16 @@ export async function getAllMyBooking(req, res, next) {
   try {
     log.info(TAG + `.getAllBooking()`);
     log.debug(`signup object = ${JSON.stringify(req.body)}`);
+    const {
+      pageNum,
+      pageSize,
+      orderId
+    } = req.query;
+    const filter = {pageNum:1,pageSize:10};
+    if (orderId && orderId != "") filter.order_id = orderId;
+    if(pageNum && pageNum !="")filter.pageNum = pageNum;
+    if(pageSize && pageSize !="")filter.pageSize = pageSize;
+    
     const authResponse = await paymentServices.getAllBooking({
       user_id: req.userSession.id,
     });
@@ -147,16 +161,18 @@ export async function getAllMyBooking(req, res, next) {
 }
 
 export async function getAllPayments(req, res, next) {
-  const { plan, package: selectedDestination, destination, id } = req.query;
+  const { plan, package: selectedDestination, destination, id,pageNum,pageSize } = req.query;
   try {
     log.info(TAG + `.getAllPayments()`);
     log.debug(`signup object = ${JSON.stringify(req.body)}`);
-    const filter = {};
+    const filter = {pageNum:1,pageSize:10};
     if (plan && plan != "") filter.plan = plan;
     if (selectedDestination && selectedDestination != "")
       filter.package = selectedDestination;
     if (destination && destination != "") filter.destination = destination;
     if (id && id != "") filter.orderId = id;
+    if(pageNum && pageNum !="")filter.pageNum = pageNum;
+    if(pageSize && pageSize !="")filter.pageSize = pageSize;
 
     const authResponse = await paymentServices.getAllPayments(filter);
     responseBuilder(authResponse, res, next, req);

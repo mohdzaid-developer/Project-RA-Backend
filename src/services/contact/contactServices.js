@@ -25,13 +25,13 @@ export async function saveContactDetails(data) {
   return serviceResponse;
 }
 
-export async function getContactDetails() {
+export async function getContactDetails(filter) {
   logger.info(`${TAG}.getContactDetailsDetails() ==> `);
   const serviceResponse = { statusCode: HttpStatusCodes.CREATED };
   try {
-    let response = await contactDb?.getContactDetails();
+    let response = await contactDb?.getContactDetails(filter);
     serviceResponse.statusCode = HttpStatusCodes.CREATED;
-    serviceResponse.data = [...response];
+    serviceResponse.data =response;
     return serviceResponse;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.getContactDetailsDetails`, error);
@@ -64,13 +64,13 @@ export async function saveNewsLetter(data) {
 }
 
 
-export async function getNewsLetter() {
+export async function getNewsLetter(filter) {
   logger.info(`${TAG}.getNewsLetter() ==> `,);
   const serviceResponse = { statusCode: HttpStatusCodes.CREATED };
   try {
-    let response = await contactDb?.getNewsLetter();
+    let response = await contactDb?.getNewsLetter(filter);
     serviceResponse.statusCode = HttpStatusCodes.CREATED;
-    serviceResponse.data = [...response];
+    serviceResponse.data =response
     return serviceResponse;
   } catch (error) {
     logger.error(`ERROR occurred in ${TAG}.getNewsLetter`, error);
