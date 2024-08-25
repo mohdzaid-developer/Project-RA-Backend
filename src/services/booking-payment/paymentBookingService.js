@@ -158,6 +158,7 @@ export async function updateCustomOrder(user) {
       ...user,
       order_id:order?.id,
       status: "pending",
+      type:"customUpdate"
     });
     await customBookingConfirmSMS({
       email: user?.email,
@@ -194,21 +195,20 @@ export async function capturePayment(req) {
     let response = await paymentAndBookingDb?.getAllBooking({
       order_id: req.body.payload.payment.entity.order_id,
     });
-
-    await paymentAndBookingDb?.savePaymentDetails({
-      user_id: response[0]?.user_id,
+    let res=await paymentAndBookingDb?.savePaymentDetails({
+      user_id: response?.data[0]?.user_id,
       order_id: req.body.payload.payment.entity.order_id,
       payment_id: req.body.payload.payment.entity.id,
       transaction_type: req.body.payload.payment.entity.method,
       currency: req.body.payload.payment.entity.currency,
-      phone: response[0]?.phone,
-      client_name: response[0]?.client_name,
-      email: response[0]?.email,
+      phone: response?.data[0]?.phone,
+      client_name: response?.data[0]?.client_name,
+      email: response?.data[0]?.email,
       amount: req.body.payload.payment.entity.amount,
       status: "paid",
     });
-    await bookingConfirmSMS({ ...response });
-    await adminBookingConfirmSMS({ ...response });
+    await bookingConfirmSMS({ ...response?.data[0] });
+    await adminBookingConfirmSMS({ ...response?.data[0]});
     return serviceResponse;
   } catch (error) {
     serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
@@ -258,12 +258,12 @@ export async function getCustomOrder(filter) {
     let response = await paymentAndBookingDb?.getAllBooking({
       _id: filter?.bookingId,
     });
-    if (response[0]?.status != "pending") {
+    if (response?.data[0]?.data?.status != "pending") {
       serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
       serviceResponse.message = "Already Booked !";
     } else {
       serviceResponse.message = "booked list Fetched Successfully.";
-      serviceResponse.data = response[0];
+      serviceResponse.data = response?.data;
     }
   } catch (error) {
     serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;

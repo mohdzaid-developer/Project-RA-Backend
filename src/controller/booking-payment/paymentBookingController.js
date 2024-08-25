@@ -90,10 +90,10 @@ export async function updateBookingStatus(req, res, next) {
   try {
     log.info(TAG + `.updateBookingStatus()`);
     log.debug(`signup object = ${JSON.stringify(req.body)}`);
-    const { bookingStatus: status, id } = req.query;
+    const { bookingStatus: status, bookingId } = req.query;
     const authResponse = await paymentServices.updateBookingStatus({
       status,
-      id,
+      bookingId,
     });
     responseBuilder(authResponse, res, next, req);
   } catch (error) {
@@ -113,6 +113,7 @@ export async function getAllBooking(req, res, next) {
     pageNum,
     pageSize
   } = req.query;
+  console.log(req.query.bookingId)
   try {
     log.info(TAG + `.getAllBooking()`);
     log.debug(`signup object = ${JSON.stringify(req.body)}`);
@@ -123,7 +124,6 @@ export async function getAllBooking(req, res, next) {
     if (destination && destination != "") filter.destination = destination;
     if (id && id != "") filter.order_id = id;
     if (status && status != "") filter.status = status;
-    if (bookingId && bookingId != "") filter._id = bookingId;
     if (bookingId && bookingId != "") filter.bookingId = bookingId;
     if(pageNum && pageNum !="")filter.pageNum = pageNum;
     if(pageSize && pageSize !="")filter.pageSize = pageSize;
@@ -143,10 +143,10 @@ export async function getAllMyBooking(req, res, next) {
     const {
       pageNum,
       pageSize,
-      orderId
+      bookingId
     } = req.query;
     const filter = {pageNum:1,pageSize:10};
-    if (orderId && orderId != "") filter.order_id = orderId;
+    if (bookingId && bookingId != "") filter._id = bookingId;
     if(pageNum && pageNum !="")filter.pageNum = pageNum;
     if(pageSize && pageSize !="")filter.pageSize = pageSize;
     

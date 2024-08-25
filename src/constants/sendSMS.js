@@ -118,7 +118,7 @@ export const bookingConfirmSMS = async (data) => {
 
     const userTripConfirmation = {
       from: process.env.USER_EMAIL,
-      to: data["0"].email,
+      to: data.email,
       subject: "Trip Confirmation",
       html: `<!DOCTYPE html>
     <html lang="en">
@@ -174,15 +174,15 @@ export const bookingConfirmSMS = async (data) => {
                 <h1>Your Trip is Confirmed!</h1>
             </div>
             <div class="trip-details">
-                <h3>Dear ${data["0"]?.client_name},</h3>
-                <p>We are excited to confirm your upcoming trip to <strong>${data["0"]?.destination}</strong>. Below are your trip details:</p>
-                <p><strong>Booking ID:</strong>${data["0"]?._id}</p>
-                <p><strong>Destination:</strong> ${data["0"]?.destination}</p>
-                <p><strong>Departure Date:</strong> ${data["0"]?.start_date}</p>
-                <p><strong>Return Date:</strong>${data["0"]?.end_date}</p>
+                <h3>Dear ${data?.client_name},</h3>
+                <p>We are excited to confirm your upcoming trip to <strong>${data?.destination}</strong>. Below are your trip details:</p>
+                <p><strong>Booking ID:</strong>${data?._id}</p>
+                <p><strong>Destination:</strong> ${data?.destination}</p>
+                <p><strong>Departure Date:</strong> ${data?.start_date}</p>
+                <p><strong>Return Date:</strong>${data?.end_date}</p>
                 <p><strong>Traveler(s):</strong> [Traveler Names]</p>
-                <p><strong>Total Cost:</strong> ${data["0"]?.total_amount}</p>
-                <p><strong>Advance paid:</strong> ${data["0"]?.paid_amount}</p>
+                <p><strong>Total Cost:</strong> ${data?.total_amount}</p>
+                <p><strong>Advance paid:</strong> ${data?.paid_amount}</p>
                 <p>Please keep this email for your records. If you have any questions or need to make changes to your booking, feel free to contact us.</p>
                 <p>We wish you a wonderful trip!</p>
                 <p>Best regards,<br>[Your Company Name]</p>
@@ -279,15 +279,15 @@ export const adminBookingConfirmSMS = async (data) => {
                 <h1>New Booking</h1>
             </div>
             <div class="trip-details">
-                <h3>Dear ${data["0"]?.client_name},</h3>
-                <p>We are excited to confirm your upcoming trip to <strong>${data["0"]?.destination}</strong>. Below are your trip details:</p>
-                <p><strong>Booking ID:</strong>${data["0"]?._id}</p>
-                <p><strong>Destination:</strong> ${data["0"]?.destination}</p>
-                <p><strong>Departure Date:</strong> ${data["0"]?.start_date}</p>
-                <p><strong>Return Date:</strong>${data["0"]?.end_date}</p>
+                <h3>Dear ${data?.client_name},</h3>
+                <p>We are excited to confirm your upcoming trip to <strong>${data?.destination}</strong>. Below are your trip details:</p>
+                <p><strong>Booking ID:</strong>${data?._id}</p>
+                <p><strong>Destination:</strong> ${data?.destination}</p>
+                <p><strong>Departure Date:</strong> ${data?.start_date}</p>
+                <p><strong>Return Date:</strong>${data?.end_date}</p>
                 <p><strong>Traveler(s):</strong> [Traveler Names]</p>
-                <p><strong>Total Cost:</strong> ${data["0"]?.total_amount}</p>
-                <p><strong>Advance paid:</strong> ${data["0"]?.paid_amount}</p>
+                <p><strong>Total Cost:</strong> ${data?.total_amount}</p>
+                <p><strong>Advance paid:</strong> ${data?.paid_amount}</p>
                 <p>Please keep this email for your records. If you have any questions or need to make changes to your booking, feel free to contact us.</p>
                 <p>We wish you a wonderful trip!</p>
                 <p>Best regards,<br>[Your Company Name]</p>

@@ -33,7 +33,7 @@ export const saveBookingDetails = async (data) => {
 export const findAndUpdateBookingStatus = async (data) => {
   try {
     let response;
-    if (data?._id) {
+    if (data?.type=="customUpdate") {
       response = await BookingSchema.updateMany(
         { _id: data._id },
         {
@@ -48,7 +48,7 @@ export const findAndUpdateBookingStatus = async (data) => {
       );
     } else {
       response = await BookingSchema.updateOne(
-        { order_id: data.id },
+        { _id: data.bookingId },
         { $set: { status: data?.status } }
       );
     }
@@ -67,6 +67,9 @@ export const getAllBooking = async (filter) => {
 
     delete filter.pageNum
     delete filter.pageSize
+
+    console.log("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")
+    console.log(filter)
     const totalResultsCount = await BookingSchema.countDocuments();
     let response;
     if (filter?.status == "request") {
@@ -80,9 +83,9 @@ export const getAllBooking = async (filter) => {
         .skip((pagination?.pageNum - 1) * pagination?.pageSize)
         .limit(pagination?.pageSize);
     } else {
-      if (pagination?.bookingId != null) {
+      if (filter?.bookingId != null) {
         response = await BookingSchema.find({
-          _id: pagination?._id,
+          _id: filter?.bookingId,
         })
           .sort({
             createdAt: -1,
@@ -99,6 +102,8 @@ export const getAllBooking = async (filter) => {
           .limit(pagination?.pageSize);
       }
     }
+    console.log("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")
+    console.log(response)
     return { data: response, totalResultsCount };
   } catch (error) {
     return error;
@@ -108,8 +113,8 @@ export const getAllBooking = async (filter) => {
 export const getAllPayments = async (filter) => {
   try {
     let pagination={
-      pageNum:filter?.pageNum,
-      pageSize:filter?.pageSize
+      pageNum:filter?.pageNum??1,
+      pageSize:filter?.pageSize??10
     }
 
     delete filter.pageNum
@@ -130,8 +135,8 @@ export const getAllPayments = async (filter) => {
 export const getAllUsers = async (filter) => {
   try {
     let pagination={
-      pageNum:filter?.pageNum,
-      pageSize:filter?.pageSize
+      pageNum:filter?.pageNum??1,
+      pageSize:filter?.pageSize??10
     }
 
     delete filter.pageNum
