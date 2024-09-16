@@ -42,7 +42,7 @@ const logger = createLogger({
             ),
         }),
         new transports.DailyRotateFile({
-            filename: path.resolve(process.env.LOG_DIRECTORY?process.env.LOG_DIRECTORY:"printx", 'printx-%DATE%.log'),
+            filename: path.resolve(process.env.LOG_DIRECTORY?process.env.LOG_DIRECTORY:"logger", 'logger-%DATE%.log'),
             datePattern: 'YYYY-MM-DD',
             zippedArchive: true,
             maxSize: '50m',
