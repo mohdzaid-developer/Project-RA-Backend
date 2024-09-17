@@ -22,6 +22,10 @@ export default function initializeRoutes(app) {
     res.status(404).send('Not Found');
   });
 
+  app.use((req, res, next) => {
+    res.setHeader('Origin-Agent-Cluster', '?1');
+    next();
+});
   // app.use(express.json())
   // const __dirname=path.dirname("")
   // const buildpath=path.join(__dirname,"../../../Project-RA-Frontend/dist", 'index.html')
