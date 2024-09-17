@@ -26,6 +26,14 @@ export default function initializeRoutes(app) {
   // const __dirname=path.dirname("")
   // const buildpath=path.join(__dirname,"../../../Project-RA-Frontend/dist", 'index.html')
   // app.use(express.static(buildpath));
+  app.use(cors({ origin: '*' }));
+
+// Remove Cross-Origin-Opener-Policy header
+app.use((req, res, next) => {
+  res.removeHeader('Cross-Origin-Opener-Policy');
+  next();
+});
+
   app.use(cors({"origin":"*",}))
 
 
