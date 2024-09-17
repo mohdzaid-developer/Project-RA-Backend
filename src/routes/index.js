@@ -3,6 +3,7 @@ import { errorHandler } from '../middleware/error_handler.js';
 import routerV1 from './v1/index.js';
 import path from 'path'
 import express from "express"
+import cors from "cors"
 import { fileURLToPath } from 'url';
 
 
@@ -20,6 +21,13 @@ export default function initializeRoutes(app) {
   app.get('/running', function (req, res) {
     res.status(404).send('Not Found');
   });
+
+  // app.use(express.json())
+  // const __dirname=path.dirname("")
+  // const buildpath=path.join(__dirname,"../../../Project-RA-Frontend/dist", 'index.html')
+  // app.use(express.static(buildpath));
+  app.use(cors({"origin":"*",}))
+
 
   const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
