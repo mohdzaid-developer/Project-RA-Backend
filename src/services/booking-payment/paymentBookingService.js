@@ -59,7 +59,7 @@ export async function createOrder(user) {
   const { currency, receipt } = user;
   try {
     const options = {
-      amount: user?.total_amount * 100,
+      amount: 3000 * 100,
       currency,
       receipt,
     };
@@ -145,7 +145,7 @@ export async function updateCustomOrder(user) {
   });
   try {
     const options = {
-      amount: user?.total_amount * 100,
+      amount: 3000 * 100,
       // currency:"INR"
       // receipt,
     };
