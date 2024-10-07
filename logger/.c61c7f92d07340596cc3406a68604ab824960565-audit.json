@@ -1,0 +1,90 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 15
+    },
+    "auditLog": "/home/ubuntu/Project-RA-Backend/logger/.c61c7f92d07340596cc3406a68604ab824960565-audit.json",
+    "files": [
+        {
+            "date": 1726971568810,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-09-22.log",
+            "hash": "8679aff104d5da5a6d004c02682d83c85f10bddc7a0249d04bdd2692598b4dad"
+        },
+        {
+            "date": 1727062323517,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-09-23.log",
+            "hash": "1e50a456eff0a2a2fca8d973425738939e37ea15c56c71072f4a9f13dcec30c4"
+        },
+        {
+            "date": 1727141909678,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-09-24.log",
+            "hash": "bfbeccb8f38bf1bc4ba2f1a302c245bc38c2bf303cb611655afa9734d5312323"
+        },
+        {
+            "date": 1727246081663,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-09-25.log",
+            "hash": "2600247194a6761798e0da1405872b356a329babd574bd7e00e6446f6f6e6d1b"
+        },
+        {
+            "date": 1727315864294,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-09-26.log",
+            "hash": "bb8e1f2500dbcb2b1972ce1547b648777212c5e869aec3cd6dbc0c96f9957383"
+        },
+        {
+            "date": 1727400391670,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-09-27.log",
+            "hash": "498b496e1269d6f698d109df2675052fc4f6d39ba47a3c338882f1dce139cd3c"
+        },
+        {
+            "date": 1727484266420,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-09-28.log",
+            "hash": "e56e0e7929c3820a81155620d52b5b304e5b4fc747c636f5a164b0f5ca78274c"
+        },
+        {
+            "date": 1727572821733,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-09-29.log",
+            "hash": "5ddf882e40306c28e69e78d8f6d0c3537574ec2214219e90920be75cae2f0f75"
+        },
+        {
+            "date": 1727667008272,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-09-30.log",
+            "hash": "eb4993c3c5c46f928e32c0c1b8ee21800ca1d5a653817ef70a3fc334c5991666"
+        },
+        {
+            "date": 1727741767519,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-10-01.log",
+            "hash": "c173b7380a75a7b792a6ae2e6383ff42ac3b8d563926991a88f63cbb785c884d"
+        },
+        {
+            "date": 1727849529823,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-10-02.log",
+            "hash": "e5b10ddc340c12a171f106609ce067c1e36a35fb393ef57992c8c52c3143ab82"
+        },
+        {
+            "date": 1727914785954,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-10-03.log",
+            "hash": "4e8fe7ae567362e2f606c1209efb473ce518b650ddc5071df06752ae3d89ee9d"
+        },
+        {
+            "date": 1728006409076,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-10-04.log",
+            "hash": "22f71c898a7566c4b61a883130a24b18ad56f318285561c463f1a4d004c5d863"
+        },
+        {
+            "date": 1728115671207,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-10-05.log",
+            "hash": "1b688d4d3b8aa13ddd2ab1f691dc2037068b54f4f1cb78ae5a73be791e8fa9a2"
+        },
+        {
+            "date": 1728175638364,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-10-06.log",
+            "hash": "6f5bf11f0d893e1f1582537b93271c77731d0c8d57744c8ee058493654cf81a6"
+        },
+        {
+            "date": 1728259419213,
+            "name": "/home/ubuntu/Project-RA-Backend/logger/logger-2024-10-07.log",
+            "hash": "d99312d695c7813ffd3292f20de24c965a19fa9c421f10b489ec190456adc2ad"
+        }
+    ],
+    "hashType": "sha256"
+}
