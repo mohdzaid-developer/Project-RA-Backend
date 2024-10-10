@@ -207,8 +207,10 @@ export async function capturePayment(req) {
       amount: req.body.payload.payment.entity.amount,
       status: "paid",
     });
+    console.log("rrrrrrrrrrrrrrrrrrrrrrr")
+    console.log(response)
     await bookingConfirmSMS({ ...response?.data[0] });
-    await adminBookingConfirmSMS({ ...response?.data[0]});
+    // await adminBookingConfirmSMS({ ...response?.data[0]});
     return serviceResponse;
   } catch (error) {
     serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;

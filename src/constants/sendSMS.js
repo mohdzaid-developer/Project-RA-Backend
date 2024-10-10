@@ -115,7 +115,8 @@ export const bookingConfirmSMS = async (data) => {
         pass: process.env.EMAIL_PASS_KEY,
       },
     });
-
+console.log("ccccccccccccccccccccccccccccccccccc")
+console.log(data)
     const userTripConfirmation = {
       from: process.env.USER_EMAIL,
       to: data.email,
