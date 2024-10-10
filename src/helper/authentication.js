@@ -50,3 +50,8 @@ export function verifyAccessToken(token) {
 export const verifyOTPToken = async (token) => {
     return jsonwebtoken.verify(token, JWT_ACCESS_TOKEN_SECRET);
 };
+
+export function getRandomFourDigitNumber() {
+    return Math.floor(1000 + Math.random() * 9000);
+  }
+  

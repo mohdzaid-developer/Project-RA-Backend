@@ -5,6 +5,7 @@ import { HttpStatusCodes } from "../../constants/statusCode.js";
 import {
   generateAccessToken,
   generateJWT,
+  getRandomFourDigitNumber,
 } from "../../helper/authentication.js";
 import { sendSMS } from "../../constants/sendSMS.js";
 import otpGenerator from "otp-generator";
@@ -64,10 +65,7 @@ export async function otpResend(user) {
     } else {
       if (user) {
         if (user?.otpType == "register") {
-          let otp = otpGenerator.generate(4, {
-            upperCaseAlphabets: false,
-            specialChars: false,
-          });
+          let otp = getRandomFourDigitNumber();
           const accessToken = await generateJWT(
             {
               ...user,
@@ -199,12 +197,7 @@ export async function loginUser(user) {
   try {
     const existedUser = await adminAuth.checkEmailOrPhoneExist(user.email, { projection: { _id: 1 } });
     if (existedUser) {
-      let otp = otpGenerator.generate(4, {
-        upperCaseAlphabets: false,
-        specialChars: false,
-        alphabets: false, // disable all alphabets
-        digits: true      // enable digits only
-    });
+      let otp = getRandomFourDigitNumber()
       user.generatedPassword = await hashPassword(otp);
             const tokenPromise = generateJWT(
         { ...user, otp, otpType: false, role: "admin" },
