@@ -26,9 +26,10 @@ export async function addNewImage(user) {
         serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
       }
     } catch (error) {
+      serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
       logger.error(`ERROR occurred in ${TAG}.addNewImage`, error);
       serviceResponse.error =
-        "Failed to create admin due to technical difficulties";
+        "Failed to create due to technical difficulties";
     }
     return serviceResponse;
   }
@@ -48,9 +49,10 @@ export async function getProfileData(user) {
         serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
       }
     } catch (error) {
+      serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
       logger.error(`ERROR occurred in ${TAG}.getProfileData`, error);
       serviceResponse.error =
-        "Failed to create admin due to technical difficulties";
+        "Failed due to technical difficulties";
     }
     return serviceResponse;
   }

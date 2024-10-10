@@ -44,9 +44,10 @@ export async function createUser(user) {
             };
     }
   } catch (error) {
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     logger.error(`ERROR occurred in ${TAG}.createUser`, error);
     serviceResponse.error =
-      "Failed to create admin due to technical difficulties";
+      "Failed to create  due to technical difficulties";
   }
   return serviceResponse;
 }
@@ -93,9 +94,10 @@ export async function otpVerify(user) {
       }
     }
   } catch (error) {
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     logger.error(`ERROR occurred in ${TAG}.createUser`, error);
     serviceResponse.error =
-      "Failed to create admin due to technical difficulties";
+      "Failed due to technical difficulties";
   }
   return serviceResponse;
 }
@@ -139,9 +141,10 @@ export async function otpResend(user) {
       }
     }
   } catch (error) {
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     logger.error(`ERROR occurred in ${TAG}.otpResend`, error);
     serviceResponse.error =
-      "Failed to create admin due to technical difficulties";
+      "Failed due to technical difficulties";
   }
   return serviceResponse;
 }
@@ -175,9 +178,10 @@ export async function loginUser(user) {
       serviceResponse.data = null;
     }
   } catch (error) {
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     logger.error(`ERROR occurred in ${TAG}.loginUser`, error);
     serviceResponse.error =
-      "Failed to create admin due to technical difficulties";
+      "Failed due to technical difficulties";
   }
   return serviceResponse;
 }
@@ -205,9 +209,10 @@ export async function changePassword(user) {
       serviceResponse.statusCode = HttpStatusCodes.NOT_FOUND;
     }
   } catch (error) {
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     logger.error(`ERROR occurred in ${TAG}.changePassword`, error);
     serviceResponse.error =
-      "Failed to create admin due to technical difficulties";
+      "Failed  due to technical difficulties";
   }
   return serviceResponse;
 }
@@ -244,9 +249,10 @@ export async function forgotPassword(user) {
       };
     }
   } catch (error) {
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     logger.error(`ERROR occurred in ${TAG}.forgotPassword`, error);
     serviceResponse.error =
-      "Failed to create admin due to technical difficulties";
+      "Failed due to technical difficulties";
   }
   return serviceResponse;
 }

@@ -1,14 +1,13 @@
-import logger from "../../logger/index.js";
-import { hashPassword, comparePasswords } from "../../helper/encryption.js";
-import * as adminAuth from "../../db/db_comands/admin/auth_connection.js";
+import { sendSMS } from "../../constants/sendSMS.js";
 import { HttpStatusCodes } from "../../constants/statusCode.js";
+import * as adminAuth from "../../db/db_comands/admin/auth_connection.js";
 import {
   generateAccessToken,
   generateJWT,
   getRandomFourDigitNumber,
 } from "../../helper/authentication.js";
-import { sendSMS } from "../../constants/sendSMS.js";
-import otpGenerator from "otp-generator";
+import { comparePasswords, hashPassword } from "../../helper/encryption.js";
+import logger from "../../logger/index.js";
 const TAG = "auth.service";
 
 export async function createAdmin(user) {
@@ -43,6 +42,7 @@ export async function createAdmin(user) {
       };
     }
   } catch (error) {
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     logger.error(`ERROR occurred in ${TAG}.createAdmin`, error);
     serviceResponse.error =
       "Failed to create admin due to technical difficulties";
@@ -89,10 +89,7 @@ export async function otpResend(user) {
         }else{
           const existedUser = await adminAuth.checkEmailOrPhoneExist(user.email);
           if (existedUser) {
-            let otp = otpGenerator.generate(4, {
-              upperCaseAlphabets: false,
-              specialChars: false,
-            });
+            let otp = getRandomFourDigitNumber();
             user.generatedPassword = await hashPassword(otp);
             const accessToken = await generateJWT(
               { ...user, otp, otpType: false, role: "admin" },
@@ -121,7 +118,7 @@ export async function otpResend(user) {
     logger.error(`ERROR occurred in ${TAG}.otpResend`, error);
     serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     serviceResponse.error =
-      "Failed to create admin due to technical difficulties";
+      "Failed  due to technical difficulties";
   }
   return serviceResponse;
 }
@@ -181,9 +178,10 @@ export async function otpVerify(user) {
       }
     }
   } catch (error) {
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     logger.error(`ERROR occurred in ${TAG}.createUser`, error);
     serviceResponse.error =
-      "Failed to create admin due to technical difficulties";
+      "Failed to due to technical difficulties";
   }
   return serviceResponse;
 }
@@ -226,7 +224,7 @@ export async function loginUser(user) {
       serviceResponse.data = null;
     }
   } catch (error) {
-    serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
+    serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;
     logger.error(`ERROR occurred in ${TAG}.loginAdmin`, error);
     serviceResponse.error = "Failed to create admin due to technical difficulties";
   }
