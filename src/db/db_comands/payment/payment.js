@@ -4,9 +4,6 @@ import UserAuthModule from "../../../models/user/authModel.js";
 
 export const savePaymentDetails = async (data) => {
   const payment = new Payment({ ...data });
-
-  console.log("jjjjjjjjjjjjjjjjjjjjjjjjjj")
-  console.log(data)
   try {
     let res = await payment.save();
     await UserAuthModule.updateOne(
