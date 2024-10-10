@@ -64,12 +64,8 @@ export const getAllBooking = async (filter) => {
       pageNum:filter?.pageNum,
       pageSize:filter?.pageSize
     }
-
     delete filter.pageNum
     delete filter.pageSize
-
-    console.log("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")
-    console.log(filter)
     const totalResultsCount = await BookingSchema.countDocuments();
     let response;
     if (filter?.status == "request") {
@@ -102,8 +98,7 @@ export const getAllBooking = async (filter) => {
           .limit(pagination?.pageSize);
       }
     }
-    console.log("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR")
-    console.log(response)
+
     return { data: response, totalResultsCount };
   } catch (error) {
     return error;

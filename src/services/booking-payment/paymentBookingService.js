@@ -209,7 +209,7 @@ export async function capturePayment(req) {
     });
     console.log("rrrrrrrrrrrrrrrrrrrrrrr")
     console.log(response)
-    await bookingConfirmSMS({ ...response?.data[0] });
+    await bookingConfirmSMS(response?.data[0]);
     // await adminBookingConfirmSMS({ ...response?.data[0]});
     return serviceResponse;
   } catch (error) {
