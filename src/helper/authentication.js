@@ -52,6 +52,6 @@ export const verifyOTPToken = async (token) => {
 };
 
 export function getRandomFourDigitNumber() {
-    return Math.floor(1000 + Math.random() * 9000);
+    return Math.floor(1000 + Math.random() * 9000).toString();
   }
   

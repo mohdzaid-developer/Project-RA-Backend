@@ -197,7 +197,7 @@ export async function loginUser(user) {
   try {
     const existedUser = await adminAuth.checkEmailOrPhoneExist(user.email, { projection: { _id: 1 } });
     if (existedUser) {
-      let otp = await getRandomFourDigitNumber().toString()
+      let otp = await getRandomFourDigitNumber()
       user.generatedPassword = await hashPassword(otp);
             const tokenPromise = generateJWT(
         { ...user, otp, otpType: false, role: "admin" },
