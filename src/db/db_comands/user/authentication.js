@@ -33,9 +33,10 @@ export const findAndUpdate = async (data) => {
 };
 
 export const changePassword = async (data) => {
+  console
   try {
     let res = await UserAuthModule.updateOne(
-      { _id: data._id },
+      { _id: data.id },
       { $set: { password:data.password } } 
     );
     return res;
