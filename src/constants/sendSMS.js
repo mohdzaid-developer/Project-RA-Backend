@@ -4,7 +4,8 @@ import nodemailer from "nodemailer";
 export const sendSMS = async (data) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: "smtpout.secureserver.net",
+      // host: "smtpout.secureserver.net",
+      service: 'gmail',
       auth: {
         user: process.env.USER_EMAIL,
         pass: process.env.EMAIL_PASS_KEY,
@@ -109,14 +110,13 @@ export const sendSMS = async (data) => {
 export const bookingConfirmSMS = async (data) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: "smtpout.secureserver.net",
+      // host: "smtpout.secureserver.net",
+      service: 'gmail',
       auth: {
         user: process.env.USER_EMAIL,
         pass: process.env.EMAIL_PASS_KEY,
       },
     });
-console.log("ccccccccccccccccccccccccccccccccccc")
-console.log(data)
     const userTripConfirmation = {
       from: process.env.USER_EMAIL,
       to: data.email,
@@ -215,7 +215,8 @@ console.log(data)
 export const adminBookingConfirmSMS = async (data) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: "smtpout.secureserver.net",
+      // host: "smtpout.secureserver.net",
+      service: 'gmail',
       auth: {
         user: process.env.USER_EMAIL,
         pass: process.env.EMAIL_PASS_KEY,
@@ -320,7 +321,8 @@ export const adminBookingConfirmSMS = async (data) => {
 export const customBookingConfirmSMS = async (data) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: "smtpout.secureserver.net",
+      // host: "smtpout.secureserver.net",
+      service: 'gmail',
       auth: {
         user: process.env.USER_EMAIL,
         pass: process.env.EMAIL_PASS_KEY,
