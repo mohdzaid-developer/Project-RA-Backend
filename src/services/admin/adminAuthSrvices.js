@@ -172,12 +172,13 @@ export async function otpVerify(user) {
                 isLogin:true
               };
             } else {
-              serviceResponse.message = "invalid otp 1!";
+              serviceResponse.message = "invalid otp !";
               serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
             }
           }
         } else {
           logger.debug("saved user::" + user);
+          serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
           serviceResponse.data = {
             message: "invalid otp !.",
           };

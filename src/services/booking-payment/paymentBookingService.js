@@ -188,7 +188,7 @@ export async function capturePayment(req) {
   const serviceResponse = { statusCode: HttpStatusCodes.CREATED };
 
   try {
-    const shasum = crypto.createHmac("sha256", "WeRnyn9uXXOidBHRsvgLRb97");
+    const shasum = crypto.createHmac("sha256",process.env.RAZOR_PAY_SECRET);
     shasum.update(JSON.stringify(req.body));
     const digest = shasum.digest("hex");
 
