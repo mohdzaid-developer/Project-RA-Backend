@@ -113,7 +113,6 @@ export async function getAllBooking(req, res, next) {
     pageNum,
     pageSize
   } = req.query;
-  console.log(req.query.bookingId)
   try {
     log.info(TAG + `.getAllBooking()`);
     log.debug(`signup object = ${JSON.stringify(req.body)}`);
