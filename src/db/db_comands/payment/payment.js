@@ -13,10 +13,12 @@ export const savePaymentDetails = async (data) => {
       { _id: data?.user_id },
       { $set: { isBooked: true } }
     );
-    await BookingSchema.updateMany(
+
+   const ress= await BookingSchema.updateMany(
       { order_id: data?.order_id },
       { $set: { status: "Booked",paid_amount:3000 } }
     );
+    console.log(ress)
     return res;
   } catch (error) {
     return error;
