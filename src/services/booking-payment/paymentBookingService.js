@@ -209,7 +209,7 @@ export async function capturePayment(req) {
     });
 
     await bookingConfirmSMS(response?.data[0]);
-    // await adminBookingConfirmSMS({ ...response?.data[0]});
+    await adminBookingConfirmSMS({ ...response?.data[0]});
     return serviceResponse;
   } catch (error) {
     serviceResponse.statusCode = HttpStatusCodes.INTERNAL_SERVER_ERROR;

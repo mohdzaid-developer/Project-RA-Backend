@@ -13,7 +13,7 @@ export const saveContactDetails = async (data) => {
 
 export const getContactDetails = async (filter) => {
   try {
-    const totalResultsCount = await contactUsModel.countDocuments();
+    const totalResultsCount = await contactUsModel.countDocuments(filter);
     let pagination = {
       pageNum: filter?.pageNum,
       pageSize: filter?.pageSize,
@@ -45,7 +45,7 @@ export const saveNewsLetter = async (data) => {
 
 export const getNewsLetter = async (filter) => {
   try {
-    const totalResultsCount = await newsLetterModel.countDocuments();
+    const totalResultsCount = await newsLetterModel.countDocuments(filter);
     let pagination = {
       pageNum: filter?.pageNum,
       pageSize: filter?.pageSize,

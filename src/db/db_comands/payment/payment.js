@@ -4,15 +4,18 @@ import UserAuthModule from "../../../models/user/authModel.js";
 
 export const savePaymentDetails = async (data) => {
   const payment = new Payment({ ...data });
+
+  console.log("jjjjjjjjjjjjjjjjjjjjjjjjjj")
+  console.log(data)
   try {
     let res = await payment.save();
     await UserAuthModule.updateOne(
       { _id: data?.user_id },
       { $set: { isBooked: true } }
     );
-    await BookingSchema.updateOne(
+    await BookingSchema.updateMany(
       { order_id: data?.order_id },
-      { $set: { status: "Booked" } }
+      { $set: { status: "Booked",paid_amount:3000 } }
     );
     return res;
   } catch (error) {
@@ -66,7 +69,7 @@ export const getAllBooking = async (filter) => {
     }
     delete filter.pageNum
     delete filter.pageSize
-    const totalResultsCount = await BookingSchema.countDocuments();
+    const totalResultsCount = await BookingSchema.countDocuments(filter);
     let response;
     if (filter?.status == "request") {
       response = await BookingSchema.find({
@@ -114,7 +117,7 @@ export const getAllPayments = async (filter) => {
 
     delete filter.pageNum
     delete filter.pageSize
-    const totalResultsCount = await Payment.countDocuments();
+    const totalResultsCount = await Payment.countDocuments(filter);
     const response = await Payment.find(filter)
       .sort({
         createdAt: -1,
@@ -136,7 +139,7 @@ export const getAllUsers = async (filter) => {
 
     delete filter.pageNum
     delete filter.pageSize
-    const totalResultsCount = await UserAuthModule.countDocuments();
+    const totalResultsCount = await UserAuthModule.countDocuments(filter);
     const response = await UserAuthModule.find(filter)
       .sort({
         createdAt: -1,
