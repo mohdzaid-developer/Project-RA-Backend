@@ -202,7 +202,9 @@ export async function loginUser(user) {
       let otp = otpGenerator.generate(4, {
         upperCaseAlphabets: false,
         specialChars: false,
-      });
+        alphabets: false, // disable all alphabets
+        digits: true      // enable digits only
+    });
       user.generatedPassword = await hashPassword(otp);
             const tokenPromise = generateJWT(
         { ...user, otp, otpType: false, role: "admin" },
