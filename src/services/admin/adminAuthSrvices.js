@@ -22,10 +22,7 @@ export async function createAdmin(user) {
       serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
       return serviceResponse;
     } else {
-      let otp = otpGenerator.generate(4, {
-        upperCaseAlphabets: false,
-        specialChars: false,
-      });
+      let otp = getRandomFourDigitNumber();
       user.generatedPassword = await hashPassword(otp);
       const accessToken = await generateJWT(
         { ...user, otp, otpType: "register", role: "admin" },
@@ -229,6 +226,7 @@ export async function loginUser(user) {
       serviceResponse.data = null;
     }
   } catch (error) {
+    serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
     logger.error(`ERROR occurred in ${TAG}.loginAdmin`, error);
     serviceResponse.error = "Failed to create admin due to technical difficulties";
   }

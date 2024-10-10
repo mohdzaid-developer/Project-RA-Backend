@@ -1,13 +1,13 @@
-import logger from "../../logger/index.js";
-import { hashPassword, comparePasswords } from "../../helper/encryption.js";
-import * as Auth from "../../db/db_comands/user/authentication.js";
+import { sendSMS } from "../../constants/sendSMS.js";
 import { HttpStatusCodes } from "../../constants/statusCode.js";
+import * as Auth from "../../db/db_comands/user/authentication.js";
 import {
   generateAccessToken,
   generateJWT,
+  getRandomFourDigitNumber,
 } from "../../helper/authentication.js";
-import { sendSMS } from "../../constants/sendSMS.js";
-import otpGenerator from "otp-generator";
+import { comparePasswords, hashPassword } from "../../helper/encryption.js";
+import logger from "../../logger/index.js";
 
 const TAG = "auth.service";
 
@@ -24,10 +24,7 @@ export async function createUser(user) {
       serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
       return serviceResponse;
     } else {
-      let otp = otpGenerator.generate(4, {
-        upperCaseAlphabets: false,
-        specialChars: false,
-      });
+      let otp = getRandomFourDigitNumber();
       const accessToken = await generateJWT(
         { ...user, otp, newCreating: true },
         200,
@@ -115,10 +112,7 @@ export async function otpResend(user) {
     } else {
       if (user) {
         const {fullName,email,phone,password,newCreating}=user
-        let otp = otpGenerator.generate(4, {
-          upperCaseAlphabets: false,
-          specialChars: false,
-        });
+        let otp = getRandomFourDigitNumber();
         const accessToken = await generateJWT(
           {
             fullName,email,phone,password,newCreating,otp,
@@ -229,10 +223,7 @@ export async function forgotPassword(user) {
       serviceResponse.statusCode = HttpStatusCodes.BAD_REQUEST;
       return serviceResponse;
     } else {
-      let otp = otpGenerator.generate(4, {
-        upperCaseAlphabets: false,
-        specialChars: false,
-      });
+      let otp = getRandomFourDigitNumber();
       const accessToken = await generateJWT(
         { id: existedUser[0]?._id, email: existedUser[0]?.email, otp, new: false ,forget:true},
         300,
