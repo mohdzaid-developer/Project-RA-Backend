@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 15
+    },
+    "auditLog": "D:\\pp\\tour\\Project-RA-Backend\\logger\\.b4abaca8726fc7b30a920265eac16ca5daf1f64b-audit.json",
+    "files": [
+        {
+            "date": 1728560233483,
+            "name": "D:\\pp\\tour\\Project-RA-Backend\\logger\\logger-2024-10-10.log",
+            "hash": "a77c17ebe402f7af72b3ce04f7093b78d264ad45b374cb285c947f25410b1d2a"
+        }
+    ],
+    "hashType": "sha256"
+}

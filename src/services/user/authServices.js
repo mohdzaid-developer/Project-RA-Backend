@@ -199,7 +199,7 @@ export async function changePassword(user) {
     const existedUser = await Auth.checkEmailOrPhoneExist(user.email);
     if (existedUser) {
       user.password = await hashPassword(user.password);
-      const res = await Auth.findAndUpdate({ ...user });
+      const res = await Auth.changePassword({ ...user });
       serviceResponse.message = "password changed !";
       serviceResponse.statusCode = HttpStatusCodes.OK;
       serviceResponse.data = res;

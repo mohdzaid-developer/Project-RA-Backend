@@ -32,6 +32,18 @@ export const findAndUpdate = async (data) => {
   }
 };
 
+export const changePassword = async (data) => {
+  try {
+    let res = await UserAuthModule.updateOne(
+      { _id: data._id },
+      { $set: { password:data.password } } 
+    );
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const findAndUpdateImage = async (data) => {
   try {
     let res = await UserAuthModule.updateOne(
