@@ -333,7 +333,7 @@ export const customBookingConfirmSMS = async (data) => {
       from: process.env.USER_EMAIL,
       to: data?.email,
       subject: "Trip Confirmation",
-      html: `<a href="http://localhost:5173/${data?.destination}/${data?.package}/${data?.plan}?token=${data?.accessToken}">http://localhost:5173/${data?.destination}/${data?.package}/${data?.plan}?token=${data?.accessToken}</a>`,
+      html: `<a href="https://comeflywithme.co.in/${data?.destination}/${data?.package}/${data?.plan}?token=${data?.accessToken}">https://comeflywithme.co.in/${data?.destination}/${data?.package}/${data?.plan}?token=${data?.accessToken}</a>`,
     };
 
     // Send email asynchronously
